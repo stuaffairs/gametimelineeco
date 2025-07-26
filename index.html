@@ -1,661 +1,355 @@
 <!DOCTYPE html>
-
 <html lang="th">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Timeline วิวัฒนาการของการเปิดเสรีของระบบเศรษฐกิจไทย</title>
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-
-    <style>
-
-        body {
-
-            font-family: 'Sarabun', sans-serif;
-
-            background-color: #f5f3ff; /* Violet-50 */
-
-        }
-
-        #timeline-container {
-
-            position: relative;
-
-            counter-reset: timeline-counter;
-
-        }
-
-        #timeline-container::before {
-
-            content: '';
-
-            position: absolute;
-
-            top: 0;
-
-            bottom: 0;
-
-            left: 2rem;
-
-            width: 4px;
-
-            background-color: #c4b5fd; /* Violet-300 */
-
-            border-radius: 2px;
-
-        }
-
-        .timeline-item {
-
-            position: relative;
-
-            padding-left: 5rem;
-
-            margin-bottom: 1rem;
-
-            transition: transform 0.2s ease-in-out;
-
-        }
-
-        .timeline-item::before {
-
-            counter-increment: timeline-counter;
-
-            content: counter(timeline-counter);
-
-            position: absolute;
-
-            left: 2rem;
-
-            top: 50%;
-
-            transform: translate(-50%, -50%);
-
-            width: 40px;
-
-            height: 40px;
-
-            background-color: #a78bfa; /* Violet-400 */
-
-            color: white;
-
-            border-radius: 50%;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-weight: 700;
-
-            font-size: 1.125rem;
-
-            border: 4px solid #f5f3ff;
-
-            z-index: 1;
-
-            transition: background-color 0.3s, border-color 0.3s;
-
-        }
-
-        .timeline-item .content {
-
-            border-radius: 0.75rem;
-
-            padding: 1rem 1.5rem;
-
-            box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.07);
-
-            cursor: grab;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            transition: border-color 0.3s, background-color 0.3s;
-
-            border: 1px solid transparent;
-
-        }
-
-        .dragging {
-
-            opacity: 0.8;
-
-            transform: scale(1.02);
-
-            box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.15);
-
-            cursor: grabbing;
-
-        }
-
-        .drag-over-placeholder {
-
-            height: 90px;
-
-            background-color: rgba(139, 92, 246, 0.1);
-
-            border: 2px dashed #a78bfa;
-
-            border-radius: 0.75rem;
-
-            margin-left: 5rem;
-
-            margin-bottom: 1rem;
-
-        }
-
-        .correct::before {
-
-            background-color: #34d399; /* Emerald-400 */
-
-            border-color: #d1fae5; /* Emerald-100 */
-
-        }
-
-        .correct .content {
-
-            border-color: #6ee7b7; /* Green-300 */
-
-        }
-
-        .incorrect::before {
-
-            background-color: #f87171; /* Red-400 */
-
-            border-color: #fee2e2; /* Red-100 */
-
-        }
-
-        .incorrect .content {
-
-            border-color: #fda4af; /* Rose-300 */
-
-        }
-
-        .handle {
-
-            color: #9ca3af;
-
-            margin-left: 1rem;
-
-        }
-
-        .result-display {
-
-            padding-left: 1rem;
-
-            font-weight: 500;
-
-            margin-top: 0.25rem;
-
-        }
-
-    </style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timeline วิวัฒนาการของการเปิดเสรีของระบบเศรษฐกิจไทย</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f5f3ff; /* Violet-50 */
+        }
+        #timeline-container {
+            position: relative;
+            counter-reset: timeline-counter;
+        }
+        #timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 2rem;
+            width: 4px;
+            background-color: #c4b5fd; /* Violet-300 */
+            border-radius: 2px;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s ease-in-out;
+        }
+        .timeline-item::before {
+            counter-increment: timeline-counter;
+            content: counter(timeline-counter);
+            position: absolute;
+            left: 2rem;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background-color: #a78bfa; /* Violet-400 */
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.125rem;
+            border: 4px solid #f5f3ff;
+            z-index: 1;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .timeline-item .content {
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.07);
+            cursor: grab;
+            display: flex;
+            flex-direction: column; /* เปลี่ยนเป็น column เพื่อจัดข้อความและหมายเลข */
+            align-items: center; /* จัดกลางตามแนวนอน */
+            justify-content: center; /* จัดกลางตามแนวตั้ง */
+            text-align: center; /* จัดข้อความให้อยู่กึ่งกลาง */
+            transition: border-color 0.3s, background-color 0.3s;
+            border: 1px solid transparent;
+        }
+        .dragging {
+            opacity: 0.8;
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.15);
+            cursor: grabbing;
+        }
+        .drag-over-placeholder {
+            height: 90px;
+            background-color: rgba(139, 92, 246, 0.1);
+            border: 2px dashed #a78bfa;
+            border-radius: 0.75rem;
+            margin-left: 5rem;
+            margin-bottom: 1rem;
+        }
+        .correct::before {
+            background-color: #34d399; /* Emerald-400 */
+            border-color: #d1fae5; /* Emerald-100 */
+        }
+        .correct .content {
+            border-color: #6ee7b7; /* Green-300 */
+        }
+        .incorrect::before {
+            background-color: #f87171; /* Red-400 */
+            border-color: #fee2e2; /* Red-100 */
+        }
+        .incorrect .content {
+            border-color: #fda4af; /* Rose-300 */
+        }
+        .handle {
+            color: #9ca3af;
+            /* margin-left: 1rem; */ /* ลบ margin-left ออก เพื่อให้ handle ไม่ดันข้อความ */
+            margin-top: 0.5rem; /* เพิ่ม margin-top เพื่อแยก handle ออกจากข้อความ */
+            align-self: flex-end; /* ย้าย handle ไปมุมขวาด้านล่าง */
+        }
+        .result-display {
+            padding-left: 1rem;
+            font-weight: 500;
+            margin-top: 0.25rem;
+            text-align: left; /* จัดข้อความผลลัพธ์ให้อยู่ด้านซ้าย */
+            width: 100%; /* ทำให้เต็มความกว้าง */
+        }
+        .content-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-bottom: 0.5rem; /* ระยะห่างระหว่างหมายเลขและข้อความ */
+        }
+        .content-number {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #4a5568; /* Gray-700 */
+            margin-right: 0.75rem; /* ระยะห่างระหว่างหมายเลขกับข้อความ */
+        }
+    </style>
 </head>
-
 <body class="p-4 sm:p-6 md:p-8">
 
-
-
-    <div class="max-w-3xl mx-auto">
-
-        <div class="text-center mb-12">
-
-            <h1 class="text-3xl md:text-4xl font-bold text-violet-800">Timeline วิวัฒนาการของการเปิดเสรีของระบบเศรษฐกิจไทย</h1>
-
-            <p class="text-gray-600 mt-2 text-lg">ลากการ์ดเพื่อเรียงลำดับเหตุการณ์ให้ถูกต้อง</p>
-
-        </div>
-
-
-
-        <div id="timeline-container" class="flex flex-col">
-
-            <!-- Timeline items will be injected here by JS -->
-
-        </div>
-
-
-
-        <div class="text-center mt-12">
-
-            <button id="check-button" class="bg-violet-600 text-white font-bold py-3 px-8 rounded-full hover:bg-violet-700 transition-all text-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-
-                <i class="fas fa-check-circle mr-2"></i>ตรวจคำตอบ
-
-            </button>
-
-            <button id="reset-button" class="bg-gray-500 text-white font-bold py-3 px-8 rounded-full hover:bg-gray-600 transition-all text-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hidden">
-
-                <i class="fas fa-redo mr-2"></i>เล่นอีกครั้ง
-
-            </button>
-
-        </div>
-
-       
-
-        <div id="result-container" class="text-center mt-8 p-6 bg-white rounded-xl shadow-lg transition-opacity duration-500 opacity-0 hidden">
-
-            <!-- Result content will be injected here -->
-
-        </div>
-
-    </div>
-
-
-
-    <script>
-
-        document.addEventListener('DOMContentLoaded', () => {
-
-            const events = [
-
-                { id: 1, year: 1855, text: "สนธิสัญญาเบาว์ริง" },
-
-                { id: 2, year: 1962, text: "แผนพัฒนาเศรษฐกิจฯ ฉบับที่ 1" },
-
-                { id: 3, year: 1982, text: "เข้าเป็นสมาชิก GATT" },
-
-                { id: 4, year: 1989, text: "นำชุดนโยบาย ฉันทามติวอชิงตัน มาใช้" },
-
-                { id: 5, year: 1992, text: "เข้าร่วมจัดตั้ง AFTA" },
-
-                { id: 6, year: 1995, text: "เข้าเป็นสมาชิก WTO" },
-
-                { id: 7, year: 1997, text: "วิกฤตต้มยำกุ้ง – รับความช่วยเหลือจาก IMF" },
-
-                { id: 8, year: 2003, text: "เร่งทำ FTA ทวิภาคี (พ.ศ. 2546–2549)" },
-
-                { id: 9, year: 2010, text: "เริ่มเจรจา RCEP" },
-
-                { id: 10, year: 2021, text: "RCEP มีผลบังคับใช้" },
-
-                { id: 11, year: 2022, text: "อยู่ระหว่างพิจารณาเข้าร่วม CPTPP (พ.ศ. 2565–2568)" },
-
-                { id: 12, year: 2025, text: "ผลักดัน Digital Trade & Green Economy" },
-
-            ];
-
-           
-
-            const cardColors = [
-
-                'bg-sky-100', 'bg-green-100', 'bg-yellow-100', 'bg-pink-100',
-
-                'bg-blue-100', 'bg-teal-100', 'bg-amber-100', 'bg-fuchsia-100',
-
-                'bg-cyan-100', 'bg-lime-100', 'bg-orange-100', 'bg-rose-100'
-
-            ];
-
-
-
-            const timelineContainer = document.getElementById('timeline-container');
-
-            const checkButton = document.getElementById('check-button');
-
-            const resetButton = document.getElementById('reset-button');
-
-            const resultContainer = document.getElementById('result-container');
-
-            let draggedItem = null;
-
-
-
-            function createTimelineItem(event, color) {
-
-                const item = document.createElement('div');
-
-                item.className = 'timeline-item';
-
-                item.draggable = true;
-
-                item.dataset.id = event.id;
-
-                item.dataset.year = event.year;
-
-
-
-                item.innerHTML = `
-
-                    <div class="content ${color}">
-
-                        <span class="font-medium text-gray-800">${event.text}</span>
-
-                        <i class="fas fa-grip-vertical handle"></i>
-
-                    </div>
-
-                    <div class="result-display hidden"></div>
-
-                `;
-
-                return item;
-
-            }
-
-
-
-            function initializeGame() {
-
-                timelineContainer.innerHTML = '';
-
-                resultContainer.classList.add('opacity-0', 'hidden');
-
-                checkButton.classList.remove('hidden');
-
-                resetButton.classList.add('hidden');
-
-
-
-                const shuffledEvents = [...events].sort(() => Math.random() - 0.5);
-
-                const shuffledColors = [...cardColors].sort(() => Math.random() - 0.5);
-
-
-
-                shuffledEvents.forEach((event, index) => {
-
-                    const item = createTimelineItem(event, shuffledColors[index]);
-
-                    timelineContainer.appendChild(item);
-
-                });
-
-
-
-                addDragListeners();
-
-            }
-
-
-
-            function addDragListeners() {
-
-                const items = document.querySelectorAll('.timeline-item');
-
-                items.forEach(item => {
-
-                    item.addEventListener('dragstart', handleDragStart);
-
-                    item.addEventListener('dragend', handleDragEnd);
-
-                    item.addEventListener('dragover', handleDragOver);
-
-                    item.addEventListener('drop', handleDrop);
-
-                });
-
-            }
-
-           
-
-            function handleDragStart(e) {
-
-                draggedItem = e.currentTarget;
-
-                setTimeout(() => {
-
-                    draggedItem.classList.add('dragging');
-
-                }, 0);
-
-            }
-
-
-
-            function handleDragEnd() {
-
-                if(draggedItem) {
-
-                   draggedItem.classList.remove('dragging');
-
-                }
-
-                draggedItem = null;
-
-                document.querySelectorAll('.drag-over-placeholder').forEach(p => p.remove());
-
-            }
-
-
-
-            function handleDragOver(e) {
-
-                e.preventDefault();
-
-                const afterElement = getDragAfterElement(timelineContainer, e.clientY);
-
-                const placeholder = document.querySelector('.drag-over-placeholder');
-
-                if (!placeholder) {
-
-                    const newPlaceholder = document.createElement('div');
-
-                    newPlaceholder.className = 'drag-over-placeholder';
-
-                    timelineContainer.insertBefore(newPlaceholder, afterElement);
-
-                } else {
-
-                     timelineContainer.insertBefore(placeholder, afterElement);
-
-                }
-
-            }
-
-
-
-            function handleDrop(e) {
-
-                e.preventDefault();
-
-                const afterElement = getDragAfterElement(timelineContainer, e.clientY);
-
-                if (draggedItem) {
-
-                    timelineContainer.insertBefore(draggedItem, afterElement);
-
-                }
-
-            }
-
-
-
-            function getDragAfterElement(container, y) {
-
-                const draggableElements = [...container.querySelectorAll('.timeline-item:not(.dragging)')];
-
-                return draggableElements.reduce((closest, child) => {
-
-                    const box = child.getBoundingClientRect();
-
-                    const offset = y - box.top - box.height / 2;
-
-                    if (offset < 0 && offset > closest.offset) {
-
-                        return { offset: offset, element: child };
-
-                    } else {
-
-                        return closest;
-
-                    }
-
-                }, { offset: Number.NEGATIVE_INFINITY }).element;
-
-            }
-
-
-
-            function checkAnswers() {
-
-                let correctCount = 0;
-
-                const sortedEvents = [...events].sort((a, b) => a.year - b.year);
-
-                const userOrderedItems = [...timelineContainer.querySelectorAll('.timeline-item')];
-
-               
-
-                userOrderedItems.forEach((item, index) => {
-
-                    const itemId = parseInt(item.dataset.id);
-
-                    const correctId = sortedEvents[index].id;
-
-                    const correctYear = sortedEvents[index].year;
-
-
-
-                    item.classList.remove('correct', 'incorrect');
-
-                    item.draggable = false;
-
-                    item.querySelector('.content').style.cursor = 'default';
-
-                   
-
-                    const resultDisplay = item.querySelector('.result-display');
-
-                    resultDisplay.classList.remove('hidden');
-
-
-
-                    if (itemId === correctId) {
-
-                        item.classList.add('correct');
-
-                        correctCount++;
-
-                        resultDisplay.innerHTML = `<span class="text-green-700"><i class="fas fa-check"></i> ถูกต้อง (พ.ศ. ${correctYear})</span>`;
-
-                    } else {
-
-                        item.classList.add('incorrect');
-
-                        const correctEvent = events.find(e => e.id === itemId);
-
-                        resultDisplay.innerHTML = `<span class="text-red-700"><i class="fas fa-times"></i> ปีที่ถูกต้องของเหตุการณ์นี้คือ พ.ศ. ${correctEvent.year}</span>`;
-
-                    }
-
-                });
-
-               
-
-                showResult(correctCount);
-
-
-
-                checkButton.classList.add('hidden');
-
-                resetButton.classList.remove('hidden');
-
-            }
-
-           
-
-            function showResult(score) {
-
-                let rankTitle, rankDescription, rankColor, rankEmoji;
-
-
-
-                if (score >= 10) {
-
-                    rankTitle = 'ตัวท็อปเศรษฐกิจไทย';
-
-                    rankDescription = 'ความรู้ของคุณเฉียบคมมาก!';
-
-                    rankColor = 'text-green-500';
-
-                    rankEmoji = '👑';
-
-                } else if (score >= 7) {
-
-                    rankTitle = 'ผู้บริหารเศรษฐกิจมือทอง';
-
-                    rankDescription = 'คุณมีความเข้าใจในภาพรวมเศรษฐกิจเป็นอย่างดี';
-
-                    rankColor = 'text-blue-500';
-
-                    rankEmoji = '💼';
-
-                } else if (score >= 4) {
-
-                    rankTitle = 'พนักงานปฏิบัติการด้านเศรษฐกิจ';
-
-                    rankDescription = 'ทำได้ดี! ยังมีโอกาสเรียนรู้เพิ่มเติมได้อีกนะ';
-
-                    rankColor = 'text-yellow-500';
-
-                    rankEmoji = '📈';
-
-                } else {
-
-                    rankTitle = 'เด็กฝึกงาน';
-
-                    rankDescription = 'ทุกการเรียนรู้คือการเริ่มต้นที่ดี สู้ๆ!';
-
-                    rankColor = 'text-gray-500';
-
-                    rankEmoji = '🌱';
-
-                }
-
-
-
-                resultContainer.innerHTML = `
-
-                    <h3 class="text-3xl font-bold ${rankColor}">${rankEmoji} ${rankTitle} ${rankEmoji}</h3>
-
-                    <p class="text-xl mt-2 text-gray-700">คุณทำได้ <span class="font-bold text-2xl ${rankColor}">${score}</span> / ${events.length} คะแนน</p>
-
-                    <p class="text-lg mt-1 text-gray-600">${rankDescription}</p>
-
-                `;
-
-                resultContainer.classList.remove('hidden');
-
-                setTimeout(() => resultContainer.classList.remove('opacity-0'), 100);
-
-            }
-
-
-
-            checkButton.addEventListener('click', checkAnswers);
-
-            resetButton.addEventListener('click', initializeGame);
-
-
-
-            initializeGame();
-
-        });
-
-    </script>
-
+    <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-bold text-violet-800">Timeline วิวัฒนาการของการเปิดเสรีของระบบเศรษฐกิจไทย</h1>
+            <p class="text-gray-600 mt-2 text-lg">ลากการ์ดเพื่อเรียงลำดับเหตุการณ์ให้ถูกต้อง</p>
+        </div>
+
+        <div id="timeline-container" class="flex flex-col">
+            </div>
+
+        <div class="text-center mt-12">
+            <button id="check-button" class="bg-violet-600 text-white font-bold py-3 px-8 rounded-full hover:bg-violet-700 transition-all text-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                <i class="fas fa-check-circle mr-2"></i>ตรวจคำตอบ
+            </button>
+            <button id="reset-button" class="bg-gray-500 text-white font-bold py-3 px-8 rounded-full hover:bg-gray-600 transition-all text-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 hidden">
+                <i class="fas fa-redo mr-2"></i>เล่นอีกครั้ง
+            </button>
+        </div>
+        
+        <div id="result-container" class="text-center mt-8 p-6 bg-white rounded-xl shadow-lg transition-opacity duration-500 opacity-0 hidden">
+            </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const events = [
+                { id: 1, year: 1855, text: "สนธิสัญญาเบาว์ริง" },
+                { id: 2, year: 1962, text: "แผนพัฒนาเศรษฐกิจฯ ฉบับที่ 1" },
+                { id: 3, year: 1982, text: "เข้าเป็นสมาชิก GATT" },
+                { id: 4, year: 1989, text: "นำชุดนโยบาย ฉันทามติวอชิงตัน มาใช้" },
+                { id: 5, year: 1992, text: "เข้าร่วมจัดตั้ง AFTA" },
+                { id: 6, year: 1995, text: "เข้าเป็นสมาชิก WTO" },
+                { id: 7, year: 1997, text: "วิกฤตต้มยำกุ้ง – รับความช่วยเหลือจาก IMF" },
+                { id: 8, year: 2003, text: "เร่งทำ FTA ทวิภาคี (พ.ศ. 2546–2549)" },
+                { id: 9, year: 2010, text: "เริ่มเจรจา RCEP" },
+                { id: 10, year: 2021, text: "RCEP มีผลบังคับใช้" },
+                { id: 11, year: 2022, text: "อยู่ระหว่างพิจารณาเข้าร่วม CPTPP (พ.ศ. 2565–2568)" },
+                { id: 12, year: 2025, text: "ผลักดัน Digital Trade & Green Economy" },
+            ];
+            
+            const cardColors = [
+                'bg-sky-100', 'bg-green-100', 'bg-yellow-100', 'bg-pink-100', 
+                'bg-blue-100', 'bg-teal-100', 'bg-amber-100', 'bg-fuchsia-100',
+                'bg-cyan-100', 'bg-lime-100', 'bg-orange-100', 'bg-rose-100'
+            ];
+
+            const timelineContainer = document.getElementById('timeline-container');
+            const checkButton = document.getElementById('check-button');
+            const resetButton = document.getElementById('reset-button');
+            const resultContainer = document.getElementById('result-container');
+            let draggedItem = null;
+
+            function createTimelineItem(event, color) {
+                const item = document.createElement('div');
+                item.className = 'timeline-item';
+                item.draggable = true;
+                item.dataset.id = event.id;
+                item.dataset.year = event.year;
+
+                // เพิ่ม dataset.originalIndex เพื่อเก็บลำดับเริ่มต้น
+                item.dataset.originalIndex = event.id; 
+
+                item.innerHTML = `
+                    <div class="content ${color}">
+                        <div class="content-text">
+                            <span class="content-number">${event.id}.</span> 
+                            <span class="font-medium text-gray-800">${event.text}</span>
+                        </div>
+                        <i class="fas fa-grip-vertical handle"></i>
+                    </div>
+                    <div class="result-display hidden"></div>
+                `;
+                return item;
+            }
+
+            function initializeGame() {
+                timelineContainer.innerHTML = '';
+                resultContainer.classList.add('opacity-0', 'hidden');
+                checkButton.classList.remove('hidden');
+                resetButton.classList.add('hidden');
+
+                // ใช้ events.map เพื่อสร้างชุดข้อมูลใหม่ที่มี originalIndex แล้วค่อยสุ่ม
+                const shuffledEvents = [...events].map((event, index) => ({ ...event, originalIndex: index + 1 })).sort(() => Math.random() - 0.5);
+                const shuffledColors = [...cardColors].sort(() => Math.random() - 0.5);
+
+                shuffledEvents.forEach((event, index) => {
+                    const item = createTimelineItem(event, shuffledColors[index]);
+                    timelineContainer.appendChild(item);
+                });
+
+                addDragListeners();
+            }
+
+            function addDragListeners() {
+                const items = document.querySelectorAll('.timeline-item');
+                items.forEach(item => {
+                    item.addEventListener('dragstart', handleDragStart);
+                    item.addEventListener('dragend', handleDragEnd);
+                    item.addEventListener('dragover', handleDragOver);
+                    item.addEventListener('drop', handleDrop);
+                });
+            }
+            
+            function handleDragStart(e) {
+                draggedItem = e.currentTarget;
+                setTimeout(() => {
+                    draggedItem.classList.add('dragging');
+                }, 0);
+            }
+
+            function handleDragEnd() {
+                if(draggedItem) {
+                   draggedItem.classList.remove('dragging');
+                }
+                draggedItem = null;
+                document.querySelectorAll('.drag-over-placeholder').forEach(p => p.remove());
+            }
+
+            function handleDragOver(e) {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(timelineContainer, e.clientY);
+                const placeholder = document.querySelector('.drag-over-placeholder');
+                if (!placeholder) {
+                    const newPlaceholder = document.createElement('div');
+                    newPlaceholder.className = 'drag-over-placeholder';
+                    timelineContainer.insertBefore(newPlaceholder, afterElement);
+                } else {
+                    timelineContainer.insertBefore(placeholder, afterElement);
+                }
+            }
+
+            function handleDrop(e) {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(timelineContainer, e.clientY);
+                if (draggedItem) {
+                    timelineContainer.insertBefore(draggedItem, afterElement);
+                }
+            }
+
+            function getDragAfterElement(container, y) {
+                const draggableElements = [...container.querySelectorAll('.timeline-item:not(.dragging)')];
+                return draggableElements.reduce((closest, child) => {
+                    const box = child.getBoundingClientRect();
+                    const offset = y - box.top - box.height / 2;
+                    if (offset < 0 && offset > closest.offset) {
+                        return { offset: offset, element: child };
+                    } else {
+                        return closest;
+                    }
+                }, { offset: Number.NEGATIVE_INFINITY }).element;
+            }
+
+            function checkAnswers() {
+                let correctCount = 0;
+                const sortedEvents = [...events].sort((a, b) => a.year - b.year);
+                const userOrderedItems = [...timelineContainer.querySelectorAll('.timeline-item')];
+                
+                userOrderedItems.forEach((item, index) => {
+                    const itemId = parseInt(item.dataset.id);
+                    const correctId = sortedEvents[index].id;
+                    const correctYear = sortedEvents[index].year;
+
+                    item.classList.remove('correct', 'incorrect');
+                    item.draggable = false;
+                    item.querySelector('.content').style.cursor = 'default';
+                    
+                    const resultDisplay = item.querySelector('.result-display');
+                    resultDisplay.classList.remove('hidden');
+
+                    if (itemId === correctId) {
+                        item.classList.add('correct');
+                        correctCount++;
+                        resultDisplay.innerHTML = `<span class="text-green-700"><i class="fas fa-check"></i> ถูกต้อง (พ.ศ. ${correctYear})</span>`;
+                    } else {
+                        item.classList.add('incorrect');
+                        const correctEvent = events.find(e => e.id === itemId);
+                        resultDisplay.innerHTML = `<span class="text-red-700"><i class="fas fa-times"></i> ปีที่ถูกต้องของเหตุการณ์นี้คือ พ.ศ. ${correctEvent.year}</span>`;
+                    }
+                });
+                
+                showResult(correctCount);
+
+                checkButton.classList.add('hidden');
+                resetButton.classList.remove('hidden');
+            }
+            
+            function showResult(score) {
+                let rankTitle, rankDescription, rankColor, rankEmoji;
+
+                if (score >= 10) {
+                    rankTitle = 'ตัวท็อปเศรษฐกิจไทย';
+                    rankDescription = 'ความรู้ของคุณเฉียบคมมาก!';
+                    rankColor = 'text-green-500';
+                    rankEmoji = '👑';
+                } else if (score >= 7) {
+                    rankTitle = 'ผู้บริหารเศรษฐกิจมือทอง';
+                    rankDescription = 'คุณมีความเข้าใจในภาพรวมเศรษฐกิจเป็นอย่างดี';
+                    rankColor = 'text-blue-500';
+                    rankEmoji = '💼';
+                } else if (score >= 4) {
+                    rankTitle = 'พนักงานปฏิบัติการด้านเศรษฐกิจ';
+                    rankDescription = 'ทำได้ดี! ยังมีโอกาสเรียนรู้เพิ่มเติมได้อีกนะ';
+                    rankColor = 'text-yellow-500';
+                    rankEmoji = '📈';
+                } else {
+                    rankTitle = 'เด็กฝึกงาน';
+                    rankDescription = 'ทุกการเรียนรู้คือการเริ่มต้นที่ดี สู้ๆ!';
+                    rankColor = 'text-gray-500';
+                    rankEmoji = '🌱';
+                }
+
+                resultContainer.innerHTML = `
+                    <h3 class="text-3xl font-bold ${rankColor}">${rankEmoji} ${rankTitle} ${rankEmoji}</h3>
+                    <p class="text-xl mt-2 text-gray-700">คุณทำได้ <span class="font-bold text-2xl ${rankColor}">${score}</span> / ${events.length} คะแนน</p>
+                    <p class="text-lg mt-1 text-gray-600">${rankDescription}</p>
+                `;
+                resultContainer.classList.remove('hidden');
+                setTimeout(() => resultContainer.classList.remove('opacity-0'), 100);
+            }
+
+            checkButton.addEventListener('click', checkAnswers);
+            resetButton.addEventListener('click', initializeGame);
+
+            initializeGame();
+        });
+    </script>
 </body>
-
 </html>
