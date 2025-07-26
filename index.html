@@ -16,7 +16,7 @@
         }
         #timeline-container {
             position: relative;
-            counter-reset: timeline-counter;
+            /* counter-reset: timeline-counter; */ /* ลบออก ไม่ใช้ counter แล้ว */
         }
         #timeline-container::before {
             content: '';
@@ -35,22 +35,24 @@
             transition: transform 0.2s ease-in-out;
         }
         .timeline-item::before {
-            counter-increment: timeline-counter;
-            content: counter(timeline-counter);
+            /* ลบส่วนที่สร้างหมายเลขออกทั้งหมด */
+            /* counter-increment: timeline-counter; */
+            /* content: counter(timeline-counter); */
+            content: ''; /* ทำให้ว่างเปล่า เพื่อไม่ให้มีเลข */
             position: absolute;
             left: 2rem;
             top: 50%;
             transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
+            width: 20px; /* ลดขนาดวงกลมลงถ้าไม่แสดงเลข */
+            height: 20px; /* ลดขนาดวงกลมลงถ้าไม่แสดงเลข */
             background-color: #a78bfa; /* Violet-400 */
             color: white;
             border-radius: 50%;
-            display: flex;
+            display: flex; /* ยังคง display: flex เพื่อจัดกึ่งกลางวงกลมเล็กๆ */
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            font-size: 1.125rem;
+            /* font-weight: 700; */ /* ไม่จำเป็นเมื่อไม่มีตัวเลข */
+            /* font-size: 1.125rem; */ /* ไม่จำเป็นเมื่อไม่มีตัวเลข */
             border: 4px solid #f5f3ff;
             z-index: 1;
             transition: background-color 0.3s, border-color 0.3s;
@@ -61,10 +63,10 @@
             box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.07);
             cursor: grab;
             display: flex;
-            flex-direction: column; /* เปลี่ยนเป็น column เพื่อจัด handle */
-            align-items: center; /* จัดกลางตามแนวนอน */
-            justify-content: center; /* จัดกลางตามแนวตั้ง */
-            text-align: center; /* จัดข้อความให้อยู่กึ่งกลาง */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
             transition: border-color 0.3s, background-color 0.3s;
             border: 1px solid transparent;
         }
@@ -98,17 +100,16 @@
         }
         .handle {
             color: #9ca3af;
-            margin-top: 0.5rem; /* เพิ่ม margin-top เพื่อแยก handle ออกจากข้อความ */
-            align-self: flex-end; /* ย้าย handle ไปมุมขวาด้านล่าง */
+            margin-top: 0.5rem;
+            align-self: flex-end;
         }
         .result-display {
             padding-left: 1rem;
             font-weight: 500;
             margin-top: 0.25rem;
-            text-align: left; /* จัดข้อความผลลัพธ์ให้อยู่ด้านซ้าย */
-            width: 100%; /* ทำให้เต็มความกว้าง */
+            text-align: left;
+            width: 100%;
         }
-        /* ลบ .content-text และ .content-number ออก */
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
@@ -171,9 +172,6 @@
                 item.dataset.id = event.id;
                 item.dataset.year = event.year;
 
-                // ไม่ต้องใช้ originalIndex แล้ว เพราะไม่มีเลขข้อ
-                // item.dataset.originalIndex = event.id; 
-
                 item.innerHTML = `
                     <div class="content ${color}">
                         <span class="font-medium text-gray-800">${event.text}</span>
@@ -190,7 +188,6 @@
                 checkButton.classList.remove('hidden');
                 resetButton.classList.add('hidden');
 
-                // สุ่ม events โดยไม่จำเป็นต้องเพิ่ม originalIndex แล้ว
                 const shuffledEvents = [...events].sort(() => Math.random() - 0.5);
                 const shuffledColors = [...cardColors].sort(() => Math.random() - 0.5);
 
