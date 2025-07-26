@@ -222,48 +222,6 @@
                 font-size: 0.9rem;
             }
         }
-
-        /* Styling for player list in result container */
-        #current-players-scores-list {
-            margin-top: 1rem;
-            padding: 0.5rem;
-            border: 1px solid #e2e8f0; /* Gray-200 */
-            border-radius: 0.5rem;
-            background-color: #f8fafc; /* Gray-50 */
-            font-size: 0.95rem;
-            text-align: left; /* Align text within list items to left */
-        }
-        #current-players-scores-list li {
-            padding: 0.3rem 0;
-            border-bottom: 1px dashed #edf2f7; /* Gray-100 */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        #current-players-scores-list li:last-child {
-            border-bottom: none;
-        }
-
-        #previous-players-list {
-            max-height: 200px;
-            overflow-y: auto;
-            margin-top: 1rem;
-            padding: 0.5rem;
-            border: 1px solid #e2e8f0; /* Gray-200 */
-            border-radius: 0.5rem;
-            background-color: #f8fafc; /* Gray-50 */
-            font-size: 0.9rem;
-        }
-        #previous-players-list li {
-            padding: 0.3rem 0;
-            border-bottom: 1px dashed #edf2f7; /* Gray-100 */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        #previous-players-list li:last-child {
-            border-bottom: none;
-        }
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
@@ -298,13 +256,7 @@
         </div>
         
         <div id="result-container" class="text-center mt-8 p-6 bg-white rounded-xl shadow-lg transition-opacity duration-500 opacity-0 hidden">
-            <h3 class="text-2xl font-bold text-violet-700 mb-4">ผลคะแนนรอบล่าสุด</h3>
-            <ul id="current-players-scores-list" class="list-none p-0 mx-auto max-w-sm sm:max-w-md md:max-w-lg">
-                </ul>
-            <p class="text-gray-700 text-lg mt-8 font-semibold">คะแนนของผู้เล่นก่อนหน้า:</p>
-            <ul id="previous-players-list" class="list-none p-0 mx-auto max-w-xs sm:max-w-sm md:max-w-md">
-                </ul>
-        </div>
+            </div>
     </div>
 
     <script>
@@ -336,8 +288,6 @@
             const checkButton = document.getElementById('check-button');
             const resetButton = document.getElementById('reset-button');
             const resultContainer = document.getElementById('result-container');
-            const currentPlayersScoresList = document.getElementById('current-players-scores-list');
-            const previousPlayersList = document.getElementById('previous-players-list');
 
             let draggedItem = null; 
             let autoScrollInterval = null; 
@@ -411,6 +361,7 @@
                 choicesContainer.innerHTML = '';
                 timelineContainer.innerHTML = '';
                 resultContainer.classList.add('opacity-0', 'hidden');
+                resultContainer.innerHTML = ''; // Clear previous content
                 checkButton.classList.remove('hidden');
                 resetButton.classList.add('hidden');
 
@@ -738,10 +689,7 @@
             }
 
             function checkAnswers() {
-                const currentRoundScore = calculateScore();
-
-                // Since there are no named players, we save a generic "Player" score for history
-                saveCurrentScoreToHistory(currentRoundScore);
+                const currentRoundScore = calculateScore(); // Store the score
 
                 const sortedEvents = [...events].sort((a, b) => a.year - b.year);
                 const timelineSlots = [...timelineContainer.querySelectorAll('.timeline-slot')];
@@ -790,25 +738,25 @@
                     }
                 });
                 
-                showResult(currentRoundScore); 
+                showResultScreen(currentRoundScore); 
                 checkButton.classList.add('hidden');
                 resetButton.classList.remove('hidden');
             }
             
-            function showResult(scoreForThisRound) { 
+            function showResultScreen(score) { 
                 let rankTitle, rankDescription, rankColor, rankEmoji;
 
-                if (scoreForThisRound === events.length) { 
+                if (score === events.length) { 
                     rankTitle = 'ตัวท็อปเศรษฐกิจไทย';
                     rankDescription = 'ความรู้ของคุณเฉียบคมมาก!';
                     rankColor = 'text-green-500';
                     rankEmoji = '👑';
-                } else if (scoreForThisRound >= events.length * 0.7) { 
+                } else if (score >= events.length * 0.7) { 
                     rankTitle = 'ผู้บริหารเศรษฐกิจมือทอง';
                     rankDescription = 'คุณมีความเข้าใจในภาพรวมเศรษฐกิจเป็นอย่างดี';
                     rankColor = 'text-blue-500';
                     rankEmoji = '💼';
-                } else if (scoreForThisRound >= events.length * 0.3) { 
+                } else if (score >= events.length * 0.3) { 
                     rankTitle = 'พนักงานปฏิบัติการด้านเศรษฐกิจ';
                     rankDescription = 'ทำได้ดี! ยังมีโอกาสเรียนรู้เพิ่มเติมได้อีกนะ';
                     rankColor = 'text-yellow-500';
@@ -820,89 +768,27 @@
                     rankEmoji = '🌱';
                 }
 
+                // Simplified HTML for result screen - no player input or history
                 resultContainer.innerHTML = `
                     <h3 class="text-3xl font-bold ${rankColor}">${rankEmoji} ${rankTitle} ${rankEmoji}</h3>
-                    <p class="text-xl mt-2 text-gray-700">คะแนนรอบนี้: <span class="font-bold text-2xl ${rankColor}">${scoreForThisRound}</span> / ${events.length} คะแนน</p>
+                    <p class="text-xl mt-2 text-gray-700">คะแนนรอบนี้: <span class="font-bold text-2xl ${rankColor}">${score}</span> / ${events.length} คะแนน</p>
                     <p class="text-lg mt-1 text-gray-600">${rankDescription}</p>
-                    
-                    <h3 class="text-2xl font-bold text-violet-700 mt-6 mb-4">ผลคะแนนรอบล่าสุด:</h3>
-                    <ul id="current-players-scores-list" class="list-none p-0 mx-auto max-w-sm sm:max-w-md md:max-w-lg">
-                        <li>
-                            <span class="text-gray-800 font-bold">ผู้เล่น (ไม่ระบุชื่อ):</span>
-                            <span class="text-violet-700 font-bold text-xl">${scoreForThisRound}</span>
-                            <span class="text-gray-500">คะแนน</span>
-                        </li>
-                    </ul>
-
-                    <p class="text-gray-700 text-lg mt-8 font-semibold">คะแนนของผู้เล่นก่อนหน้า:</p>
-                    <ul id="previous-players-list" class="list-none p-0 mx-auto max-w-xs sm:max-w-sm md:max-w-md">
-                        </ul>
                 `;
+
                 resultContainer.classList.remove('hidden');
                 setTimeout(() => resultContainer.classList.remove('opacity-0'), 100);
-
-                // Update previous players list
-                loadAndDisplayPreviousPlayers(); 
             }
-
-            // --- Score History Management (LocalStorage) ---
-            function saveCurrentScoreToHistory(score) {
-                let playersHistory = JSON.parse(localStorage.getItem('timelinePlayersHistory')) || [];
-                const now = new Date().toLocaleString('th-TH');
-
-                // For a single unnamed player, add a generic entry
-                playersHistory.push({ 
-                    name: "ผู้เล่น (ไม่ระบุชื่อ)", 
-                    score: score, 
-                    date: now 
-                });
-                
-                // Keep history sorted by score (desc) then date (asc)
-                playersHistory.sort((a, b) => b.score - a.score || new Date(a.date).getTime() - new Date(b.date).getTime());
-                localStorage.setItem('timelinePlayersHistory', JSON.stringify(playersHistory));
-            }
-
-            function loadAndDisplayPreviousPlayers() {
-                const currentPreviousPlayersList = document.getElementById('previous-players-list');
-                if (!currentPreviousPlayersList) {
-                    console.error("Error: #previous-players-list not found for loading players.");
-                    return;
-                }
-
-                let playersHistory = JSON.parse(localStorage.getItem('timelinePlayersHistory')) || [];
-                currentPreviousPlayersList.innerHTML = ''; 
-
-                // Display up to 10 previous scores
-                playersHistory.slice(0, 10).forEach(player => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `
-                        <span class="text-gray-800 font-medium">${player.name}</span>
-                        <span class="text-violet-700 font-bold">${player.score} คะแนน</span>
-                        <span class="text-gray-500 text-sm">${player.date.split(',')[0]}</span>
-                    `;
-                    currentPreviousPlayersList.appendChild(li);
-                });
-
-                if (playersHistory.length === 0) {
-                    const li = document.createElement('li');
-                    li.textContent = 'ยังไม่มีผู้เล่นก่อนหน้า';
-                    currentPreviousPlayersList.appendChild(li);
-                }
-            }
-
 
             // --- Button Event Listeners ---
             checkButton.addEventListener('click', checkAnswers);
             resetButton.addEventListener('click', () => {
                 resultContainer.classList.add('hidden', 'opacity-0');
-                // The game content is always visible now, just re-initialize its state
+                resultContainer.innerHTML = ''; // Clear contents for next game
                 initializeGame(); 
-                loadAndDisplayPreviousPlayers(); 
             });
 
             // Initial setup - Start game immediately on DOMContentLoaded
             initializeGame(); 
-            loadAndDisplayPreviousPlayers(); 
         });
     </script>
 </body>
