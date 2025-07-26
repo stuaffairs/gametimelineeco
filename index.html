@@ -222,11 +222,127 @@
                 font-size: 0.9rem;
             }
         }
+
+        /* --- Start Screen Specific Styles --- */
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f5f3ff;
+            padding: 1rem;
+            box-sizing: border-box;
+        }
+
+        #start-screen .container {
+            background-color: #fff;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px; /* Adjust max-width as needed */
+            text-align: center;
+        }
+
+        #start-screen h1 {
+            color: #6d28d9; /* Violet-700 */
+            margin-bottom: 1.5rem;
+        }
+
+        #player-inputs-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 640px) {
+            #player-inputs-container {
+                grid-template-columns: 1fr 1fr; /* Two columns on larger screens */
+            }
+        }
+
+        .player-input-group {
+            display: flex;
+            align-items: center;
+        }
+        .player-input-group label {
+            min-width: 60px; /* Fixed width for labels */
+            text-align: right;
+            margin-right: 0.75rem;
+            font-weight: 500;
+            color: #4b5563; /* Gray-700 */
+        }
+        .player-input-group input {
+            flex-grow: 1;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db; /* Gray-300 */
+            border-radius: 0.375rem;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .player-input-group input:focus {
+            border-color: #8b5cf6; /* Violet-500 */
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+        }
+
+        /* --- Result Screen Player List Styles --- */
+        #result-player-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 2rem;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1.5rem;
+        }
+        #result-player-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0;
+            border-bottom: 1px dashed #e5e7eb;
+            font-size: 1rem;
+        }
+        #result-player-list li:last-child {
+            border-bottom: none;
+        }
+        #result-player-list li .player-name {
+            font-weight: 600;
+            color: #374151; /* Gray-700 */
+        }
+        #result-player-list li .player-score {
+            font-weight: 700;
+            color: #6d28d9; /* Violet-700 */
+        }
+        #result-player-list li .player-rank {
+            font-weight: 500;
+            color: #6b7280; /* Gray-500 */
+            font-size: 0.9rem;
+            flex-basis: 30%; /* Give some space */
+            text-align: right;
+        }
+
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
 
-    <div id="game-content" class="max-w-6xl mx-auto">
+    <div id="start-screen" class="absolute inset-0 flex flex-col justify-center items-center z-10">
+        <div class="container">
+            <h1 class="text-4xl font-bold">Timeline วิวัฒนาการของการเปิดเสรีของระบบเศรษฐกิจไทย</h1>
+            <p class="text-gray-600 mt-2 text-lg">กรอกชื่อผู้เล่น (สูงสุด 10 คน) เพื่อเริ่มเกม</p>
+            
+            <div id="player-inputs-container">
+                </div>
+
+            <button id="start-game-button" class="bg-violet-600 text-white font-bold py-3 px-8 rounded-full hover:bg-violet-700 transition-all text-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                <i class="fas fa-play-circle mr-2"></i>เริ่มเกม
+            </button>
+        </div>
+    </div>
+
+    <div id="game-content" class="max-w-6xl mx-auto hidden">
         <div class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-violet-800">Timeline วิวัฒนาการของการเปิดเสรีของระบบเศรษฐกิจไทย</h1>
             <p class="text-gray-600 mt-2 text-lg">ลากการ์ดเหตุการณ์จากฝั่งซ้ายมาเรียงลำดับในช่องด้านขวาให้ถูกต้อง</p>
@@ -254,9 +370,21 @@
                 <i class="fas fa-redo mr-2"></i>เล่นอีกครั้ง
             </button>
         </div>
-        
-        <div id="result-container" class="text-center mt-8 p-6 bg-white rounded-xl shadow-lg transition-opacity duration-500 opacity-0 hidden">
-            </div>
+    </div>
+
+    <div id="result-screen" class="max-w-3xl mx-auto mt-8 p-6 bg-white rounded-xl shadow-lg transition-opacity duration-500 opacity-0 hidden">
+        <h3 class="text-3xl font-bold text-violet-700 mb-4 text-center">ผลคะแนนทีม</h3>
+        <p class="text-xl mt-2 text-gray-700 text-center">คะแนนรวม: <span id="final-score-display" class="font-bold text-2xl text-violet-600"></span> / ${events.length} คะแนน</p>
+        <p class="text-lg mt-1 text-gray-600 text-center" id="team-rank-description"></p>
+
+        <h4 class="text-xl font-bold text-gray-700 mt-8 mb-4 text-center">ผู้เล่นในทีม:</h4>
+        <ul id="result-player-list">
+            </ul>
+        <div class="text-center mt-8">
+            <button id="play-again-button" class="bg-violet-600 text-white font-bold py-3 px-8 rounded-full hover:bg-violet-700 transition-all text-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                <i class="fas fa-redo mr-2"></i>เล่นอีกครั้ง
+            </button>
+        </div>
     </div>
 
     <script>
@@ -283,20 +411,46 @@
             ];
 
             // Accessing elements
+            const startScreen = document.getElementById('start-screen');
+            const gameContent = document.getElementById('game-content');
+            const resultScreen = document.getElementById('result-screen');
+
+            const playerInputsContainer = document.getElementById('player-inputs-container');
+            const startGameButton = document.getElementById('start-game-button');
+
             const choicesContainer = document.getElementById('choices-container');
             const timelineContainer = document.getElementById('timeline-container');
             const checkButton = document.getElementById('check-button');
-            const resetButton = document.getElementById('reset-button');
-            const resultContainer = document.getElementById('result-container');
+            const resetButton = document.getElementById('reset-button'); // This button is removed from game-content, but keeping for reference if needed elsewhere.
+            const playAgainButton = document.getElementById('play-again-button');
 
             let draggedItem = null; 
             let autoScrollInterval = null; 
             const SCROLL_SPEED = 10; 
             const SCROLL_AREA_THRESHOLD = 50; 
+            const MAX_PLAYERS_INPUT = 10; 
+
+            let activePlayers = []; // Stores player names for the current round
+            let currentTeamScore = 0; // Stores the score for the current team
 
             // Helper function to convert Christian Era (CE) to Buddhist Era (BE)
             function convertCETOBE(yearCE) {
                 return yearCE + 543;
+            }
+
+            // --- Screen Management ---
+            function showScreen(screenToShow) {
+                // Hide all main screens
+                startScreen.classList.add('hidden');
+                gameContent.classList.add('hidden');
+                resultScreen.classList.add('hidden', 'opacity-0'); // Add opacity-0 for fade effect
+
+                // Show the desired screen
+                screenToShow.classList.remove('hidden');
+                if (screenToShow === resultScreen) {
+                    // For result screen, allow fade in
+                    setTimeout(() => screenToShow.classList.remove('opacity-0'), 100);
+                }
             }
 
             // --- Auto-scroll Logic ---
@@ -356,14 +510,16 @@
                 return slot;
             }
 
-            // Game will initialize immediately on load
             function initializeGame() {
                 choicesContainer.innerHTML = '';
                 timelineContainer.innerHTML = '';
-                resultContainer.classList.add('opacity-0', 'hidden');
-                resultContainer.innerHTML = ''; // Clear previous content
+                
+                // Clear result screen content to prepare for next game
+                resultScreen.innerHTML = ''; 
+
+                // Reset game buttons state
                 checkButton.classList.remove('hidden');
-                resetButton.classList.add('hidden');
+                // resetButton.classList.add('hidden'); // This button is now effectively replaced by playAgainButton on result screen
 
                 for (let i = 0; i < events.length; i++) {
                     timelineContainer.appendChild(createTimelineSlot(i));
@@ -383,6 +539,8 @@
                 choicesContainer.addEventListener('touchmove', (e) => e.preventDefault());
                 choicesContainer.addEventListener('touchend', handleTouchEndOnChoices);
                 choicesContainer.addEventListener('touchcancel', handleTouchEndOnChoices);
+
+                showScreen(gameContent); // Show game content after initialization
             }
 
             function addMouseDragListeners() {
@@ -669,7 +827,7 @@
 
 
             // --- Game Logic and Scoring ---
-            function calculateScore() {
+            function calculateTeamScore() {
                 let score = 0;
                 const sortedEvents = [...events].sort((a, b) => a.year - b.year);
                 const timelineSlots = [...timelineContainer.querySelectorAll('.timeline-slot')];
@@ -689,7 +847,7 @@
             }
 
             function checkAnswers() {
-                const currentRoundScore = calculateScore(); // Store the score
+                currentTeamScore = calculateTeamScore(); // Store the team score
 
                 const sortedEvents = [...events].sort((a, b) => a.year - b.year);
                 const timelineSlots = [...timelineContainer.querySelectorAll('.timeline-slot')];
@@ -738,12 +896,12 @@
                     }
                 });
                 
-                showResultScreen(currentRoundScore); 
+                showResultScreen(currentTeamScore); 
                 checkButton.classList.add('hidden');
-                resetButton.classList.remove('hidden');
+                // resetButton.classList.remove('hidden'); // No longer needed here
             }
             
-            function showResultScreen(score) { 
+            function getRankInfo(score) {
                 let rankTitle, rankDescription, rankColor, rankEmoji;
 
                 if (score === events.length) { 
@@ -767,28 +925,75 @@
                     rankColor = 'text-gray-500';
                     rankEmoji = '🌱';
                 }
-
-                // Simplified HTML for result screen - no player input or history
-                resultContainer.innerHTML = `
-                    <h3 class="text-3xl font-bold ${rankColor}">${rankEmoji} ${rankTitle} ${rankEmoji}</h3>
-                    <p class="text-xl mt-2 text-gray-700">คะแนนรอบนี้: <span class="font-bold text-2xl ${rankColor}">${score}</span> / ${events.length} คะแนน</p>
-                    <p class="text-lg mt-1 text-gray-600">${rankDescription}</p>
-                `;
-
-                resultContainer.classList.remove('hidden');
-                setTimeout(() => resultContainer.classList.remove('opacity-0'), 100);
+                return { rankTitle, rankDescription, rankColor, rankEmoji };
             }
 
-            // --- Button Event Listeners ---
-            checkButton.addEventListener('click', checkAnswers);
-            resetButton.addEventListener('click', () => {
-                resultContainer.classList.add('hidden', 'opacity-0');
-                resultContainer.innerHTML = ''; // Clear contents for next game
-                initializeGame(); 
+            function showResultScreen(score) { 
+                const { rankTitle, rankDescription, rankColor, rankEmoji } = getRankInfo(score);
+
+                document.getElementById('final-score-display').textContent = score;
+                document.getElementById('team-rank-description').textContent = `${rankEmoji} ${rankTitle} ${rankEmoji} - ${rankDescription}`;
+                document.getElementById('team-rank-description').style.color = rankColor; // Apply color to the description
+
+                const playerListUl = document.getElementById('result-player-list');
+                playerListUl.innerHTML = ''; // Clear previous players
+
+                activePlayers.forEach(player => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span class="player-name">${player}</span>
+                        <span class="player-score">${score} คะแนน</span>
+                        <span class="player-rank">${rankTitle}</span>
+                    `;
+                    playerListUl.appendChild(li);
+                });
+
+                showScreen(resultScreen);
+            }
+
+            // --- Start Screen Player Input Setup ---
+            function setupPlayerInputs() {
+                playerInputsContainer.innerHTML = '';
+                for (let i = 0; i < MAX_PLAYERS_INPUT; i++) {
+                    const div = document.createElement('div');
+                    div.className = 'player-input-group';
+                    div.innerHTML = `
+                        <label for="player-name-${i + 1}">ผู้เล่น ${i + 1}:</label>
+                        <input type="text" id="player-name-${i + 1}" placeholder="ชื่อผู้เล่น ${i + 1}" class="player-name-input">
+                    `;
+                    playerInputsContainer.appendChild(div);
+                }
+            }
+
+            // --- Event Listeners ---
+            startGameButton.addEventListener('click', () => {
+                activePlayers = [];
+                const playerInputs = document.querySelectorAll('.player-name-input');
+                playerInputs.forEach(input => {
+                    const name = input.value.trim();
+                    if (name) {
+                        activePlayers.push(name);
+                    }
+                    input.value = ''; // Clear input fields for next time
+                });
+
+                if (activePlayers.length === 0) {
+                    alert('กรุณากรอกชื่อผู้เล่นอย่างน้อย 1 คน');
+                    return;
+                }
+                initializeGame(); // Start the game
             });
 
-            // Initial setup - Start game immediately on DOMContentLoaded
-            initializeGame(); 
+            checkButton.addEventListener('click', checkAnswers);
+
+            playAgainButton.addEventListener('click', () => {
+                showScreen(startScreen); // Go back to start screen to enter new players
+                setupPlayerInputs(); // Re-render player input fields
+            });
+
+            // Initial load: Show start screen and setup player inputs
+            showScreen(startScreen);
+            setupPlayerInputs();
         });
     </script>
 </body>
