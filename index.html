@@ -14,6 +14,8 @@
             font-family: 'Sarabun', sans-serif;
             background-color: #f5f3ff; /* Violet-50 */
         }
+        
+        /* Main layout for two columns */
         .two-column-layout {
             display: grid;
             grid-template-columns: 1fr; /* Default to single column on small screens */
@@ -26,7 +28,7 @@
         }
 
         #choices-container {
-            min-height: 200px; /* เพื่อให้เห็นพื้นที่ */
+            min-height: 400px; /* เพิ่ม min-height ให้เห็นพื้นที่ชัดเจน */
             border: 2px dashed #d1d5db; /* Gray-300 */
             border-radius: 0.75rem;
             padding: 1rem;
@@ -37,6 +39,8 @@
             align-content: flex-start; /* จัดการ์ดชิดบน */
             justify-content: center; /* จัดกลางในแนวนอน */
             gap: 0.75rem; /* ระยะห่างระหว่างการ์ด */
+            /* Add this line to allow dropping anywhere in the container */
+            align-items: flex-start; /* Ensures items are at the top */
         }
 
         #timeline-container {
@@ -46,7 +50,6 @@
             padding: 1rem;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-        /* ไม่มี ::before บน timeline-container แล้ว เพราะ slot แต่ละอันมีเลขและเส้นของตัวเอง */
 
         .timeline-slot {
             position: relative;
@@ -60,9 +63,21 @@
             background-color: #f9fafb; /* Light background for slots */
             transition: border-color 0.2s, background-color 0.2s; /* เพิ่ม transition */
         }
+        /* Style for the vertical line on the timeline container itself */
+        #timeline-container::before {
+            content: '';
+            position: absolute;
+            top: 1rem; /* Start from the padding of the container */
+            bottom: 1rem; /* End at the padding of the container */
+            left: 2.5rem; /* Center with the circles */
+            width: 4px;
+            background-color: #c4b5fd; /* Violet-300 */
+            border-radius: 2px;
+            z-index: 0; /* Make sure it's behind the slots */
+        }
+
 
         .timeline-slot::before {
-            counter-increment: timeline-counter; /* ใช้ counter-reset ใน #timeline-container */
             content: attr(data-slot-number); /* ดึงเลขจาก data attribute แทน counter */
             position: absolute;
             left: 2.5rem; /* ตำแหน่งของเลขข้อ */
@@ -79,7 +94,7 @@
             font-weight: 700;
             font-size: 1.125rem;
             border: 4px solid #f5f3ff;
-            z-index: 1;
+            z-index: 1; /* Make sure number is above the line */
         }
 
         .timeline-item {
@@ -93,7 +108,7 @@
             z-index: 2; /* ให้การ์ดอยู่เหนือเส้น */
         }
         
-        /* สไตล์สำหรับ content ภายใน timeline-item เหมือนเดิม */
+        /* Style for the content inside timeline-item */
         .timeline-item .content {
             border-radius: 0.75rem;
             padding: 1rem 1.5rem;
@@ -107,18 +122,18 @@
             border: 1px solid transparent;
         }
 
-        .choices-item { /* การ์ดที่อยู่ในฝั่ง choices */
-            width: calc(50% - 0.75rem); /* 2 การ์ดต่อแถวในฝั่ง choices */
-            min-width: 160px; /* กำหนดขั้นต่ำเผื่อจอเล็ก */
+        .choices-item { /* Card in the choices container */
+            width: calc(50% - 0.75rem); /* 2 cards per row in choices container */
+            min-width: 160px; /* Minimum width for smaller screens */
             flex-grow: 1;
             transition: transform 0.2s ease-in-out;
             cursor: grab;
-            margin-bottom: 0.75rem; /* เพิ่มระยะห่างด้านล่างระหว่างการ์ดใน choices */
+            margin-bottom: 0.75rem; /* Margin between cards in choices */
         }
 
-        .choices-item .content { /* ใช้ content style เดียวกันกับการ์ดอื่นๆ */
+        .choices-item .content { /* Content style for choices cards */
             border-radius: 0.75rem;
-            padding: 0.75rem 1rem; /* ลด padding ลงเล็กน้อย */
+            padding: 0.75rem 1rem; /* Smaller padding */
             box-shadow: 0 2px 5px -1px rgba(0, 0, 0, 0.05);
             display: flex;
             flex-direction: column;
@@ -148,7 +163,7 @@
             color: #9ca3af;
             margin-top: 0.5rem;
             align-self: flex-end;
-            cursor: grab; /* ให้ cursor เป็น grab บน handle ด้วย */
+            cursor: grab; /* Ensure grab cursor on handle */
         }
         .result-display {
             padding-left: 1rem;
@@ -170,7 +185,7 @@
         <div class="two-column-layout">
             <div>
                 <h2 class="text-xl font-semibold text-gray-700 mb-3 text-center">ตัวเลือกเหตุการณ์</h2>
-                <div id="choices-container">
+                <div id="choices-container" ondragover="event.preventDefault();" ondrop="handleChoicesDrop(event);" ondragleave="this.style.borderColor='#d1d5db';" ondragenter="this.style.borderColor='#a78bfa';">
                     </div>
             </div>
 
@@ -222,12 +237,12 @@
             const checkButton = document.getElementById('check-button');
             const resetButton = document.getElementById('reset-button');
             const resultContainer = document.getElementById('result-container');
-            let draggedItem = null;
+            let draggedItem = null; // Reference to the currently dragged element
 
-            // ฟังก์ชันสร้างการ์ดเหตุการณ์ (สำหรับทั้งสองฝั่ง)
+            // Function to create an event card
             function createEventCard(event, color) {
                 const item = document.createElement('div');
-                item.className = 'timeline-item'; // ใช้ class timeline-item เป็นหลัก
+                item.className = 'timeline-item'; // Base class for all cards
                 item.draggable = true;
                 item.dataset.id = event.id;
                 item.dataset.year = event.year;
@@ -242,18 +257,19 @@
                 return item;
             }
 
-            // ฟังก์ชันสร้างช่องว่างบน Timeline (ฝั่งขวา)
+            // Function to create a timeline slot (on the right side)
             function createTimelineSlot(index) {
                 const slot = document.createElement('div');
                 slot.className = 'timeline-slot';
-                slot.dataset.slotNumber = index + 1; // ใช้ data attribute สำหรับเลขข้อ
+                slot.dataset.slotNumber = index + 1; // Store slot number as data attribute
                 slot.addEventListener('dragover', handleSlotDragOver);
                 slot.addEventListener('drop', handleSlotDrop);
-                slot.addEventListener('dragleave', handleSlotDragLeave); // เพิ่ม event สำหรับ dragleave
-                slot.addEventListener('dragenter', handleSlotDragEnter); // เพิ่ม event สำหรับ dragenter
+                slot.addEventListener('dragleave', handleSlotDragLeave);
+                slot.addEventListener('dragenter', handleSlotDragEnter);
                 return slot;
             }
 
+            // Initializes the game state
             function initializeGame() {
                 choicesContainer.innerHTML = '';
                 timelineContainer.innerHTML = '';
@@ -261,54 +277,50 @@
                 checkButton.classList.remove('hidden');
                 resetButton.classList.add('hidden');
 
-                // สร้างช่องว่างบน Timeline ฝั่งขวาก่อน
+                // 1. Create 12 empty slots on the right timeline
                 for (let i = 0; i < events.length; i++) {
                     timelineContainer.appendChild(createTimelineSlot(i));
                 }
 
-                // สุ่มการ์ดเหตุการณ์และใส่ลงใน choicesContainer ฝั่งซ้าย
+                // 2. Shuffle events and colors, then create cards and place them in the choices container
                 const shuffledEvents = [...events].sort(() => Math.random() - 0.5);
                 const shuffledColors = [...cardColors].sort(() => Math.random() - 0.5);
 
                 shuffledEvents.forEach((event, index) => {
-                    const card = createEventCard(event, shuffledColors[index % shuffledColors.length]); // ใช้สีวนซ้ำ
-                    card.classList.add('choices-item'); // เพิ่ม class สำหรับ styling ของฝั่ง choices
+                    const card = createEventCard(event, shuffledColors[index % shuffledColors.length]);
+                    card.classList.add('choices-item'); // Add class for styling in choices container
                     choicesContainer.appendChild(card);
                 });
 
-                addDragListeners(); // เพิ่ม listener ให้กับการ์ดทั้งหมด
+                addDragListeners(); // Add drag listeners to all newly created cards
             }
 
+            // Attaches dragstart and dragend listeners to all cards
             function addDragListeners() {
-                const allItems = document.querySelectorAll('.timeline-item'); // เลือกทั้ง choices-item และ timeline-item (ซึ่งใช้ base class timeline-item)
+                const allItems = document.querySelectorAll('.timeline-item'); // Select all cards (both in choices and slots)
                 allItems.forEach(item => {
                     item.addEventListener('dragstart', handleDragStart);
                     item.addEventListener('dragend', handleDragEnd);
                 });
-
-                // เพิ่ม dragover/drop listener ให้ choicesContainer ด้วย
-                choicesContainer.addEventListener('dragover', handleChoicesDragOver);
-                choicesContainer.addEventListener('drop', handleChoicesDrop);
-                choicesContainer.addEventListener('dragleave', () => choicesContainer.style.borderColor = '#d1d5db');
-                choicesContainer.addEventListener('dragenter', () => choicesContainer.style.borderColor = '#a78bfa');
             }
             
+            // Event handler when dragging starts
             function handleDragStart(e) {
                 draggedItem = e.currentTarget;
                 setTimeout(() => {
                     draggedItem.classList.add('dragging');
                 }, 0);
                 e.dataTransfer.effectAllowed = "move";
-                // Store a dummy data, required for drag and drop to work in some browsers
-                e.dataTransfer.setData("text/plain", ""); 
+                e.dataTransfer.setData("text/plain", draggedItem.id); // Required for drag and drop
             }
 
+            // Event handler when dragging ends
             function handleDragEnd() {
                 if(draggedItem) {
                    draggedItem.classList.remove('dragging');
                 }
                 draggedItem = null;
-                // Reset slot border colors
+                // Reset border colors for all slots and choices container
                 document.querySelectorAll('.timeline-slot').forEach(slot => {
                     slot.style.borderColor = '#e5e7eb';
                     slot.style.backgroundColor = '#f9fafb';
@@ -316,20 +328,21 @@
                 choicesContainer.style.borderColor = '#d1d5db';
             }
 
-            // สำหรับการลากวางบนช่องว่าง Timeline
+            // Event handlers for dragover, dragenter, dragleave on timeline slots
             function handleSlotDragOver(e) {
-                e.preventDefault(); // อนุญาตให้วาง
+                e.preventDefault(); // Allow drop
                 e.dataTransfer.dropEffect = "move";
                 const targetSlot = e.currentTarget;
-                if (!targetSlot.querySelector('.timeline-item')) { // ถ้า slot ว่าง
-                    targetSlot.style.borderColor = '#a78bfa'; // เปลี่ยนสีเส้นขอบเมื่อลากมาทับ
+                // If the slot is empty, highlight it
+                if (!targetSlot.querySelector('.timeline-item') && draggedItem) {
+                    targetSlot.style.borderColor = '#a78bfa'; // Violet-400
                     targetSlot.style.backgroundColor = '#ede9fe'; // Violet-100
                 }
             }
 
             function handleSlotDragEnter(e) {
                 const targetSlot = e.currentTarget;
-                if (!targetSlot.querySelector('.timeline-item')) {
+                if (!targetSlot.querySelector('.timeline-item') && draggedItem) {
                     targetSlot.style.borderColor = '#a78bfa';
                     targetSlot.style.backgroundColor = '#ede9fe';
                 }
@@ -341,46 +354,47 @@
                 targetSlot.style.backgroundColor = '#f9fafb';
             }
 
+            // Event handler for dropping on a timeline slot
             function handleSlotDrop(e) {
                 e.preventDefault();
                 const targetSlot = e.currentTarget;
-                // รีเซ็ตสีขอบ slot
+                // Reset slot highlight
                 targetSlot.style.borderColor = '#e5e7eb';
                 targetSlot.style.backgroundColor = '#f9fafb';
 
                 if (draggedItem) {
                     const existingCard = targetSlot.querySelector('.timeline-item');
                     
-                    if (existingCard) { // ถ้า slot มีการ์ดอยู่แล้ว
-                        // ย้ายการ์ดเดิมกลับไปที่ choicesContainer
+                    if (existingCard && existingCard !== draggedItem) { // If slot has an existing card AND it's not the dragged card itself
+                        // Move the existing card back to the choices container
                         choicesContainer.appendChild(existingCard);
-                        existingCard.classList.add('choices-item');
-                        // ตรวจสอบและซ่อน result-display ของการ์ดที่ย้ายกลับ
-                        const existingResultDisplay = existingCard.querySelector('.result-display');
-                        if (existingResultDisplay) existingResultDisplay.classList.add('hidden');
-                        existingCard.draggable = true; // ให้ลากได้อีกครั้ง
-                        existingCard.querySelector('.handle').style.display = 'block'; // แสดง handle
-                        existingCard.classList.remove('correct', 'incorrect'); // ลบสถานะถูกต้อง/ไม่ถูกต้อง
+                        existingCard.classList.add('choices-item'); // Restore choices styling
+                        existingCard.draggable = true; // Make it draggable again
+                        existingCard.querySelector('.handle').style.display = 'block'; // Show handle
+                        existingCard.classList.remove('correct', 'incorrect'); // Clear result styles
+                        existingCard.querySelector('.result-display').classList.add('hidden'); // Hide result text
+                    } else if (existingCard === draggedItem) {
+                        // If dropping into the same slot it came from, do nothing special
+                        return;
                     }
-                    
-                    // วางการ์ดที่กำลังลากลงไปใน slot
+
+                    // Place the dragged card into the target slot
                     if (draggedItem.classList.contains('choices-item')) {
-                        draggedItem.classList.remove('choices-item');
+                        draggedItem.classList.remove('choices-item'); // Remove choices styling
                     }
                     targetSlot.appendChild(draggedItem);
 
-                    // ตรวจสอบและซ่อน result-display ของการ์ดที่เพิ่งวาง
-                    const droppedResultDisplay = draggedItem.querySelector('.result-display');
-                    if (droppedResultDisplay) droppedResultDisplay.classList.add('hidden');
-                    draggedItem.classList.remove('correct', 'incorrect'); // ลบสถานะถูกต้อง/ไม่ถูกต้อง
+                    // Reset styling for the dropped card
+                    draggedItem.classList.remove('correct', 'incorrect');
+                    draggedItem.querySelector('.result-display').classList.add('hidden');
                 }
             }
 
-            // สำหรับการลากวางกลับไปที่ choices-container
+            // Event handlers for dragover, drop on choices container
             function handleChoicesDragOver(e) {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = "move";
-                choicesContainer.style.borderColor = '#a78bfa';
+                choicesContainer.style.borderColor = '#a78bfa'; // Highlight choices container
             }
 
             function handleChoicesDrop(e) {
@@ -388,30 +402,43 @@
                 choicesContainer.style.borderColor = '#d1d5db'; // Reset border color
 
                 if (draggedItem) {
-                    // ถ้าการ์ดที่ลากไม่ได้มาจาก choices-container เดิม (คือมาจาก timeline-slot)
                     if (!draggedItem.classList.contains('choices-item')) {
-                        draggedItem.classList.add('choices-item');
+                        draggedItem.classList.add('choices-item'); // Add choices styling
                     }
-                    choicesContainer.appendChild(draggedItem);
-                    // ตรวจสอบและซ่อน result-display ของการ์ดที่ย้ายกลับ
-                    const resultDisplay = draggedItem.querySelector('.result-display');
-                    if (resultDisplay) resultDisplay.classList.add('hidden');
-                    draggedItem.draggable = true; // ให้ลากได้อีกครั้ง
-                    draggedItem.querySelector('.handle').style.display = 'block'; // แสดง handle
-                    draggedItem.classList.remove('correct', 'incorrect'); // ลบสถานะถูกต้อง/ไม่ถูกต้อง
+                    choicesContainer.appendChild(draggedItem); // Append to choices container
+                    
+                    // Reset styling for the dropped card
+                    draggedItem.draggable = true; // Make draggable again
+                    draggedItem.querySelector('.handle').style.display = 'block'; // Show handle
+                    draggedItem.classList.remove('correct', 'incorrect'); // Clear result styles
+                    draggedItem.querySelector('.result-display').classList.add('hidden'); // Hide result text
                 }
             }
 
+
+            // Checks the user's answers against the correct timeline
             function checkAnswers() {
                 let correctCount = 0;
-                const sortedEvents = [...events].sort((a, b) => a.year - b.year);
-                const timelineSlots = [...timelineContainer.querySelectorAll('.timeline-slot')];
-                
-                // Reset slot border/background for checking
+                const sortedEvents = [...events].sort((a, b) => a.year - b.year); // Correct order
+                const timelineSlots = [...timelineContainer.querySelectorAll('.timeline-slot')]; // User's timeline
+
+                // Reset all slot/card styles before re-checking
                 timelineSlots.forEach(slot => {
                     slot.style.borderColor = '#e5e7eb';
                     slot.style.backgroundColor = '#f9fafb';
+                    const cardInSlot = slot.querySelector('.timeline-item');
+                    if(cardInSlot) {
+                        cardInSlot.classList.remove('correct', 'incorrect');
+                        cardInSlot.querySelector('.result-display').classList.add('hidden');
+                        cardInSlot.draggable = false; // Make cards non-draggable after checking
+                        cardInSlot.querySelector('.handle').style.display = 'none'; // Hide handle
+                    }
                 });
+                document.querySelectorAll('.choices-item').forEach(item => {
+                    item.draggable = false; // Make choices non-draggable after checking
+                    item.querySelector('.handle').style.display = 'none'; // Hide handle
+                });
+
 
                 timelineSlots.forEach((slot, index) => {
                     const cardInSlot = slot.querySelector('.timeline-item');
@@ -421,11 +448,8 @@
                         const correctId = sortedEvents[index].id;
                         const correctYear = sortedEvents[index].year;
 
-                        cardInSlot.draggable = false; // ทำให้การ์ดที่อยู่ใน slot ลากไม่ได้หลังตรวจ
-                        cardInSlot.querySelector('.handle').style.display = 'none'; // ซ่อน handle
-
                         const cardResultDisplay = cardInSlot.querySelector('.result-display');
-                        cardResultDisplay.classList.remove('hidden'); // แสดงผลลัพธ์ในการ์ด
+                        cardResultDisplay.classList.remove('hidden'); // Show result text on card
 
                         if (itemId === correctId) {
                             cardInSlot.classList.add('correct');
@@ -434,11 +458,11 @@
                         } else {
                             cardInSlot.classList.add('incorrect');
                             const actualEvent = events.find(e => e.id === itemId);
-                            cardResultDisplay.innerHTML = `<span class="text-red-700"><i class="fas fa-times"></i> ปีที่ถูกต้อง: พ.ศ. ${actualEvent.year}</span>`;
+                            cardResultDisplay.innerHTML = `<span class="text-red-700"><i class="fas fa-times"></i> ปีที่ถูกต้อง: พ.ศ. ${correctEvent.year}</span>`;
                         }
                     } else {
-                        // ถ้าช่องว่างไม่ได้ถูกเติม
-                        slot.style.borderColor = '#f87171'; /* Red border for empty wrong slots */
+                        // If slot is empty, mark the slot itself as incorrect
+                        slot.style.borderColor = '#f87171'; /* Red border */
                         slot.style.backgroundColor = '#fee2e2'; /* Light red background */
                     }
                 });
@@ -449,20 +473,21 @@
                 resetButton.classList.remove('hidden');
             }
             
+            // Displays the final score and rank
             function showResult(score) {
                 let rankTitle, rankDescription, rankColor, rankEmoji;
 
-                if (score === events.length) { // ถ้าถูกต้องทั้งหมด
+                if (score === events.length) { // All correct
                     rankTitle = 'ตัวท็อปเศรษฐกิจไทย';
                     rankDescription = 'ความรู้ของคุณเฉียบคมมาก!';
                     rankColor = 'text-green-500';
                     rankEmoji = '👑';
-                } else if (score >= events.length * 0.7) { // 70% ขึ้นไป
+                } else if (score >= events.length * 0.7) { // 70% or more
                     rankTitle = 'ผู้บริหารเศรษฐกิจมือทอง';
                     rankDescription = 'คุณมีความเข้าใจในภาพรวมเศรษฐกิจเป็นอย่างดี';
                     rankColor = 'text-blue-500';
                     rankEmoji = '💼';
-                } else if (score >= events.length * 0.3) { // 30% ขึ้นไป
+                } else if (score >= events.length * 0.3) { // 30% or more
                     rankTitle = 'พนักงานปฏิบัติการด้านเศรษฐกิจ';
                     rankDescription = 'ทำได้ดี! ยังมีโอกาสเรียนรู้เพิ่มเติมได้อีกนะ';
                     rankColor = 'text-yellow-500';
@@ -483,10 +508,11 @@
                 setTimeout(() => resultContainer.classList.remove('opacity-0'), 100);
             }
 
+            // Event listeners for buttons
             checkButton.addEventListener('click', checkAnswers);
             resetButton.addEventListener('click', initializeGame);
 
-            initializeGame(); // เริ่มเกมเมื่อ DOM โหลดเสร็จ
+            initializeGame(); // Start the game when the DOM is fully loaded
         });
     </script>
 </body>
