@@ -337,10 +337,9 @@
             const resetButton = document.getElementById('reset-button');
             const resultContainer = document.getElementById('result-container');
             const currentPlayersScoresList = document.getElementById('current-players-scores-list');
-            const previousPlayersList = document.getElementById('previous-players-list'); // ยังคงมีไว้เพื่อแสดงคะแนนเก่า
+            const previousPlayersList = document.getElementById('previous-players-list');
 
             let draggedItem = null; 
-            // Removed currentPlayers array as we no longer have multiple players or names
             let autoScrollInterval = null; 
             const SCROLL_SPEED = 10; 
             const SCROLL_AREA_THRESHOLD = 50; 
