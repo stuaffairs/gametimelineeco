@@ -61,7 +61,7 @@
             box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.07);
             cursor: grab;
             display: flex;
-            flex-direction: column; /* เปลี่ยนเป็น column เพื่อจัดข้อความและหมายเลข */
+            flex-direction: column; /* เปลี่ยนเป็น column เพื่อจัด handle */
             align-items: center; /* จัดกลางตามแนวนอน */
             justify-content: center; /* จัดกลางตามแนวตั้ง */
             text-align: center; /* จัดข้อความให้อยู่กึ่งกลาง */
@@ -98,7 +98,6 @@
         }
         .handle {
             color: #9ca3af;
-            /* margin-left: 1rem; */ /* ลบ margin-left ออก เพื่อให้ handle ไม่ดันข้อความ */
             margin-top: 0.5rem; /* เพิ่ม margin-top เพื่อแยก handle ออกจากข้อความ */
             align-self: flex-end; /* ย้าย handle ไปมุมขวาด้านล่าง */
         }
@@ -109,19 +108,7 @@
             text-align: left; /* จัดข้อความผลลัพธ์ให้อยู่ด้านซ้าย */
             width: 100%; /* ทำให้เต็มความกว้าง */
         }
-        .content-text {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            margin-bottom: 0.5rem; /* ระยะห่างระหว่างหมายเลขและข้อความ */
-        }
-        .content-number {
-            font-weight: 700;
-            font-size: 1.25rem;
-            color: #4a5568; /* Gray-700 */
-            margin-right: 0.75rem; /* ระยะห่างระหว่างหมายเลขกับข้อความ */
-        }
+        /* ลบ .content-text และ .content-number ออก */
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
@@ -184,15 +171,12 @@
                 item.dataset.id = event.id;
                 item.dataset.year = event.year;
 
-                // เพิ่ม dataset.originalIndex เพื่อเก็บลำดับเริ่มต้น
-                item.dataset.originalIndex = event.id; 
+                // ไม่ต้องใช้ originalIndex แล้ว เพราะไม่มีเลขข้อ
+                // item.dataset.originalIndex = event.id; 
 
                 item.innerHTML = `
                     <div class="content ${color}">
-                        <div class="content-text">
-                            <span class="content-number">${event.id}.</span> 
-                            <span class="font-medium text-gray-800">${event.text}</span>
-                        </div>
+                        <span class="font-medium text-gray-800">${event.text}</span>
                         <i class="fas fa-grip-vertical handle"></i>
                     </div>
                     <div class="result-display hidden"></div>
@@ -206,8 +190,8 @@
                 checkButton.classList.remove('hidden');
                 resetButton.classList.add('hidden');
 
-                // ใช้ events.map เพื่อสร้างชุดข้อมูลใหม่ที่มี originalIndex แล้วค่อยสุ่ม
-                const shuffledEvents = [...events].map((event, index) => ({ ...event, originalIndex: index + 1 })).sort(() => Math.random() - 0.5);
+                // สุ่ม events โดยไม่จำเป็นต้องเพิ่ม originalIndex แล้ว
+                const shuffledEvents = [...events].sort(() => Math.random() - 0.5);
                 const shuffledColors = [...cardColors].sort(() => Math.random() - 0.5);
 
                 shuffledEvents.forEach((event, index) => {
