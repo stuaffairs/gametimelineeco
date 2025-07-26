@@ -344,6 +344,11 @@
             const SCROLL_SPEED = 10; 
             const SCROLL_AREA_THRESHOLD = 50; 
 
+            // Helper function to convert Christian Era (CE) to Buddhist Era (BE)
+            function convertCETOBE(yearCE) {
+                return yearCE + 543;
+            }
+
             // --- Auto-scroll Logic ---
             function startAutoScroll(direction) {
                 if (autoScrollInterval) clearInterval(autoScrollInterval);
@@ -367,7 +372,7 @@
                 item.className = 'timeline-item'; 
                 item.draggable = true; 
                 item.dataset.id = event.id;
-                item.dataset.year = event.year;
+                item.dataset.year = event.year; // Store CE year
 
                 item.innerHTML = `
                     <div class="content ${color}">
@@ -765,18 +770,19 @@
                     if (cardInSlot) {
                         const itemId = parseInt(cardInSlot.dataset.id);
                         const correctId = sortedEvents[index].id;
-                        const correctYear = sortedEvents[index].year;
+                        const correctYearCE = sortedEvents[index].year; // Get correct CE year
+                        const correctYearBE = convertCETOBE(correctYearCE); // Convert to BE year
 
                         const cardResultDisplay = cardInSlot.querySelector('.result-display');
                         cardResultDisplay.classList.remove('hidden');
 
                         if (itemId === correctId) {
                             cardInSlot.classList.add('correct');
-                            cardResultDisplay.innerHTML = `<span class="text-green-700"><i class="fas fa-check"></i> ถูกต้อง (พ.ศ. ${correctYear})</span>`;
+                            cardResultDisplay.innerHTML = `<span class="text-green-700"><i class="fas fa-check"></i> ถูกต้อง (พ.ศ. ${correctYearBE} / ค.ศ. ${correctYearCE})</span>`;
                         } else {
                             cardInSlot.classList.add('incorrect');
                             const correctEvent = sortedEvents[index]; 
-                            cardResultDisplay.innerHTML = `<span class="text-red-700"><i class="fas fa-times"></i> ปีที่ถูกต้อง: พ.ศ. ${correctEvent.year}</span>`;
+                            cardResultDisplay.innerHTML = `<span class="text-red-700"><i class="fas fa-times"></i> ปีที่ถูกต้อง: พ.ศ. ${convertCETOBE(correctEvent.year)} / ค.ศ. ${correctEvent.year}</span>`;
                         }
                     } else {
                         slot.style.borderColor = '#f87171';
