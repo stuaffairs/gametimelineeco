@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timeline วิวัฒนาการของการเปิดเสรีของระบบเศรษฐกิจไทย</title>
+    <title>วิวัฒนาการการเปิดเสรีทางเศรษฐกิจของไทย</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -216,9 +216,22 @@
             width: 100%;
             font-size: 0.8rem; /* Smaller font for result display */
         }
+        .event-details {
+            font-size: 0.8rem;
+            color: #4a5568; /* Gray-700 */
+            margin-top: 0.5rem;
+            text-align: justify; /* Justify text for readability */
+            display: none; /* Hidden by default */
+        }
+        .correct .event-details, .incorrect .event-details {
+            display: block; /* Show details when correct/incorrect */
+        }
         @media (min-width: 768px) {
             .result-display {
                 padding-left: 1rem;
+                font-size: 0.9rem;
+            }
+            .event-details {
                 font-size: 0.9rem;
             }
         }
@@ -228,7 +241,7 @@
 
     <div id="game-content" class="max-w-6xl mx-auto">
         <div class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-violet-800">Timeline วิวัฒนาการของการเปิดเสรีของระบบเศรษฐกิจไทย</h1>
+            <h1 class="text-3xl md:text-4xl font-bold text-violet-800">วิวัฒนาการการเปิดเสรีทางเศรษฐกิจของไทย</h1>
             <p class="text-gray-600 mt-2 text-lg">ลากการ์ดเหตุการณ์จากฝั่งซ้ายมาเรียงลำดับในช่องด้านขวาให้ถูกต้อง</p>
         </div>
 
@@ -262,18 +275,18 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const events = [
-                { id: 1, year: 1855, text: "สนธิสัญญาเบาว์ริง" },
-                { id: 2, year: 1962, text: "แผนพัฒนาเศรษฐกิจฯ ฉบับที่ 1" },
-                { id: 3, year: 1982, text: "เข้าเป็นสมาชิก GATT" },
-                { id: 4, year: 1989, text: "นำชุดนโยบาย ฉันทามติวอชิงตัน มาใช้" },
-                { id: 5, year: 1992, text: "เข้าร่วมจัดตั้ง AFTA" },
-                { id: 6, year: 1995, text: "เข้าเป็นสมาชิก WTO" },
-                { id: 7, year: 1997, text: "วิกฤตต้มยำกุ้ง – รับความช่วยเหลือจาก IMF" },
-                { id: 8, year: 2003, text: "เร่งทำ FTA ทวิภาคี" },
-                { id: 9, year: 2010, text: "เริ่มเจรจา RCEP" },
-                { id: 10, year: 2021, text: "RCEP มีผลบังคับใช้" },
-                { id: 11, year: 2022, text: "อยู่ระหว่างพิจารณาเข้าร่วม CPTPP" },
-                { id: 12, year: 2025, text: "ผลักดัน Digital Trade & Green Economy" },
+                { id: 1, year: 1855, text: "สนธิสัญญาเบาว์ริง", details: "ยกเลิกผูกขาดการค้ากับพ่อค้าอังกฤษ, เปิดการค้าเสรีกับอังกฤษครั้งแรก ลดภาษีศุลกากร วางรากฐานเศรษฐกิจสมัยใหม่" },
+                { id: 2, year: 1961, text: "แผนพัฒนาเศรษฐกิจฯ ฉบับที่ 1", details: "ประเทศไทยเริ่มใช้แผนพัฒนาเศรษฐกิจและสังคมแห่งชาติ ฉบับที่ 1 บ่งเบิกการเติบโตทางเศรษฐกิจแบบทุนนิยม การค้ากับการลงทุนขยายตัวขึ้น เน้นส่งออกและนำเข้าภายในโครงสร้างเศรษฐกิจเป็นอุตสาหกรรม" }, // Corrected year to 1961 (2504 BE)
+                { id: 3, year: 1982, text: "เข้าเป็นสมาชิก GATT", details: "ประเทศไทยเข้าร่วม General Agreement on Tariffs and Trade ซึ่งเป็นเวทีการค้าเสรีพหุภาคีก่อน WTO ส่งผลให้ไทยเริ่มเปิดเสรีเศรษฐกิจอย่างจริงจัง สอดคล้องตามพันธะผูกพันรัฐร่วมรัฐสำคัญทั่วถึงขีดความสามารถ" },
+                { id: 4, year: 1989, text: "นำชุดนโยบาย ฉันทามติวอชิงตัน มาใช้", details: "ไทยเริ่มเปิดเสรีเศรษฐกิจอย่างเป็นทางการขององค์กรการค้าโลก (WTO) เมื่อ 1 มกราคม พ.ศ.1995" },
+                { id: 5, year: 1992, text: "เข้าร่วมจัดตั้ง AFTA", details: "ประเทศไทยเป็นสมาชิกก่อตั้งเขตการค้าเสรีอาเซียน ASEAN Free Trade Area ซึ่งช่วยลดอุปสรรคทางการค้า" },
+                { id: 6, year: 1995, text: "เข้าเป็นสมาชิก WTO", details: "ไทยเข้าร่วมการจัดตั้ง ASEAN Free Trade Area (AFTA) เพื่อลดอุปสรรคทางการค้าภายในภูมิภาคอาเซียน" },
+                { id: 7, year: 1997, text: "วิกฤตต้มยำกุ้ง – รับความช่วยเหลือจาก IMF", details: "วิกฤตเศรษฐกิจครั้งใหญ่ ค่าเงินบาทอ่อนตัว รัฐบาลต้องปฏิรูปโครงสร้างเศรษฐกิจภายใต้ข้อตกลง IMF" },
+                { id: 8, year: 2003, text: "เร่งทำ FTA ทวิภาคี", details: "ไทยลงนามความตกลงการค้าเสรีทวิภาคีกับจีน (พ.ศ.2546), อินเดีย (พ.ศ.2547), ออสเตรเลีย (พ.ศ.2547), นิวซีแลนด์ (พ.ศ.2548)" },
+                { id: 9, year: 2010, text: "เริ่มเจรจา RCEP", details: "ไทยและสมาชิกอาเซียน + 6 เริ่มเจรจา RCEP เขตการค้าเสรีที่ใหญ่ที่สุดในโลก" },
+                { id: 10, year: 2021, text: "RCEP มีผลบังคับใช้", details: "ไทยเป็น 1 ใน 15 ประเทศที่ให้สัตยาบันข้อตกลง RCEP มีผลบังคับใช้ 1 มกราคม พ.ศ.2022" },
+                { id: 11, year: 2022, text: "อยู่ระหว่างพิจารณาเข้าร่วม CPTPP", details: "ไทยอยู่ระหว่างเข้าร่วม CPTPP โดยมีทั้งด้านสนับสนุนและคัดค้านในประเด็นสิทธิบัตรยา-การคุ้มครองเกษตรกร" },
+                { id: 12, year: 2025, text: "ผลักดัน Digital Trade & Green Economy", details: "ไทยอยู่ระหว่างกรอบนโยบายด้านการค้าดิจิทัล, การลดคาร์บอนในการผลิต และการค้าข้ามพรมแดนแบบไร้กระดาษ" },
             ];
             
             const cardColors = [
@@ -323,6 +336,7 @@
                 item.draggable = true; 
                 item.dataset.id = event.id;
                 item.dataset.year = event.year; // Store CE year
+                item.dataset.details = event.details; // Store details
 
                 item.innerHTML = `
                     <div class="content ${color}">
@@ -330,6 +344,7 @@
                         <i class="fas fa-grip-vertical handle"></i>
                     </div>
                     <div class="result-display hidden"></div>
+                    <div class="event-details hidden text-sm text-gray-700 mt-2 p-2 bg-gray-50 rounded"></div>
                 `;
 
                 item.addEventListener('touchstart', handleTouchStart);
@@ -369,6 +384,7 @@
                     timelineContainer.appendChild(createTimelineSlot(i));
                 }
 
+                // Create a copy of events for shuffling to avoid modifying the original sorted order
                 const shuffledEvents = [...events].sort(() => Math.random() - 0.5);
                 const shuffledColors = [...cardColors].sort(() => Math.random() - 0.5);
 
@@ -380,6 +396,7 @@
 
                 addMouseDragListeners();
 
+                // Prevent touch scrolling on containers if needed, but allow cards to be dropped
                 choicesContainer.addEventListener('touchmove', (e) => e.preventDefault());
                 choicesContainer.addEventListener('touchend', handleTouchEndOnChoices);
                 choicesContainer.addEventListener('touchcancel', handleTouchEndOnChoices);
@@ -461,23 +478,29 @@
                 if (draggedItem) {
                     const existingCard = targetSlot.querySelector('.timeline-item');
                     
+                    // If there's an existing card in the slot, move it back to choices container
                     if (existingCard && existingCard !== draggedItem) {
                         choicesContainer.appendChild(existingCard);
                         existingCard.classList.add('choices-item');
-                        existingCard.draggable = true;
-                        existingCard.querySelector('.handle').style.display = 'block';
-                        existingCard.classList.remove('correct', 'incorrect');
-                        existingCard.querySelector('.result-display').classList.add('hidden');
+                        existingCard.draggable = true; // Make it draggable again
+                        existingCard.querySelector('.handle').style.display = 'block'; // Show handle
+                        existingCard.classList.remove('correct', 'incorrect'); // Reset styles
+                        existingCard.querySelector('.result-display').classList.add('hidden'); // Hide result
+                        existingCard.querySelector('.event-details').classList.add('hidden'); // Hide details
                     } else if (existingCard === draggedItem) {
+                        // Dropped back into the same slot it was already in, do nothing
                         return;
                     }
                     
+                    // Move the dragged item to the target slot
                     if (draggedItem.classList.contains('choices-item')) {
                         draggedItem.classList.remove('choices-item');
                     }
                     targetSlot.appendChild(draggedItem);
+                    // Reset styling and hidden result display for the dragged item
                     draggedItem.classList.remove('correct', 'incorrect');
                     draggedItem.querySelector('.result-display').classList.add('hidden');
+                    draggedItem.querySelector('.event-details').classList.add('hidden');
                 }
             }
 
@@ -504,14 +527,16 @@
                 stopAutoScroll(); 
 
                 if (draggedItem) {
+                    // Ensure the dragged item has the choices-item class
                     if (!draggedItem.classList.contains('choices-item')) {
                         draggedItem.classList.add('choices-item');
                     }
                     choicesContainer.appendChild(draggedItem);
-                    draggedItem.draggable = true;
-                    draggedItem.querySelector('.handle').style.display = 'block';
-                    draggedItem.classList.remove('correct', 'incorrect');
-                    draggedItem.querySelector('.result-display').classList.add('hidden');
+                    draggedItem.draggable = true; // Make it draggable again
+                    draggedItem.querySelector('.handle').style.display = 'block'; // Show handle
+                    draggedItem.classList.remove('correct', 'incorrect'); // Reset styles
+                    draggedItem.querySelector('.result-display').classList.add('hidden'); // Hide result
+                    draggedItem.querySelector('.event-details').classList.add('hidden'); // Hide details
                 }
             }
 
@@ -523,9 +548,11 @@
                     draggedItem = e.currentTarget;
                     draggedItem.classList.add('dragging');
                     
+                    // Create a ghost element for visual feedback during touch drag
                     const ghost = draggedItem.cloneNode(true);
                     ghost.id = 'drag-ghost';
                     const computedStyle = getComputedStyle(draggedItem);
+                    // Copy relevant styles to make the ghost look like the original
                     for (const prop of computedStyle) {
                         if (['width', 'height', 'padding', 'margin', 'border'].includes(prop) || prop.startsWith('font')) {
                             ghost.style[prop] = computedStyle[prop];
@@ -535,21 +562,22 @@
                     if (contentDiv) {
                         const ghostContentDiv = ghost.querySelector('.content');
                         if (ghostContentDiv) {
-                            ghostContentDiv.className = contentDiv.className; 
+                            ghostContentDiv.className = contentDiv.className; // Copy color class
                         }
                     }
 
-                    ghost.style.position = 'fixed'; 
+                    ghost.style.position = 'fixed'; // Fixed positioning for screen relative movement
                     ghost.style.width = draggedItem.offsetWidth + 'px';
                     ghost.style.height = draggedItem.offsetHeight + 'px';
-                    ghost.style.pointerEvents = 'none'; 
+                    ghost.style.pointerEvents = 'none'; // Ensure ghost doesn't interfere with touch events
                     ghost.style.zIndex = '9999';
                     ghost.style.opacity = '0.7';
                     const handleInGhost = ghost.querySelector('.handle');
-                    if (handleInGhost) handleInGhost.style.display = 'block';
+                    if (handleInGhost) handleInGhost.style.display = 'block'; // Ensure handle is visible on ghost
 
                     document.body.appendChild(ghost);
 
+                    // Position the ghost initially
                     const rect = draggedItem.getBoundingClientRect();
                     ghost.style.left = (currentTouch.clientX - rect.width / 2) + 'px';
                     ghost.style.top = (currentTouch.clientY - rect.height / 2) + 'px';
@@ -558,7 +586,7 @@
 
             function handleTouchMove(e) {
                 if (draggedItem && currentTouch) {
-                    e.preventDefault(); 
+                    e.preventDefault(); // Prevent default scrolling
                     const ghost = document.getElementById('drag-ghost');
                     if (ghost) {
                         currentTouch = e.touches[0];
@@ -578,11 +606,12 @@
                         stopAutoScroll();
                     }
 
+                    // Highlight target slots during touch drag
                     document.querySelectorAll('.timeline-slot').forEach(slot => {
                         const slotRect = slot.getBoundingClientRect();
                         if (currentTouch.clientX > slotRect.left && currentTouch.clientX < slotRect.right &&
                             currentTouch.clientY > slotRect.top && currentTouch.clientY < slotRect.bottom) {
-                            if (!slot.querySelector('.timeline-item')) { 
+                            if (!slot.querySelector('.timeline-item')) { // Only highlight if slot is empty
                                 slot.style.borderColor = '#a78bfa';
                                 slot.style.backgroundColor = '#ede9fe';
                             }
@@ -592,6 +621,7 @@
                         }
                     });
 
+                    // Highlight choices container during touch drag
                     const choicesRect = choicesContainer.getBoundingClientRect();
                     if (currentTouch.clientX > choicesRect.left && currentTouch.clientX < choicesRect.right &&
                         currentTouch.clientY > choicesRect.top && currentTouch.clientY < choicesRect.bottom) {
@@ -605,18 +635,19 @@
             function handleTouchEnd(e) {
                 if (draggedItem) {
                     const ghost = document.getElementById('drag-ghost');
-                    if (ghost) ghost.remove();
-                    draggedItem.classList.remove('dragging');
-                    stopAutoScroll(); 
+                    if (ghost) ghost.remove(); // Remove ghost element
+                    draggedItem.classList.remove('dragging'); // Remove dragging class from original item
+                    stopAutoScroll(); // Stop any ongoing auto-scroll
 
+                    // Reset borders/backgrounds of slots and choices container
                     document.querySelectorAll('.timeline-slot').forEach(slot => {
                         slot.style.borderColor = '#e5e7eb';
                         slot.style.backgroundColor = '#f9fafb';
                     });
                     choicesContainer.style.borderColor = '#d1d5db';
 
-                    const finalTouch = currentTouch || e.changedTouches[0];
-                    const dropTarget = document.elementFromPoint(finalTouch.clientX, finalTouch.clientY);
+                    const finalTouch = currentTouch || e.changedTouches[0]; // Get the touch position when lift off
+                    const dropTarget = document.elementFromPoint(finalTouch.clientX, finalTouch.clientY); // Find element under touch
                     
                     if (dropTarget) {
                         let targetSlot = null;
@@ -632,23 +663,28 @@
                             const existingCard = targetSlot.querySelector('.timeline-item');
                             
                             if (existingCard && existingCard !== draggedItem) {
+                                // If slot has a card and it's not the one being dragged, move existing card to choices
                                 choicesContainer.appendChild(existingCard);
                                 existingCard.classList.add('choices-item');
                                 existingCard.draggable = true; 
                                 existingCard.querySelector('.handle').style.display = 'block';
                                 existingCard.classList.remove('correct', 'incorrect');
                                 existingCard.querySelector('.result-display').classList.add('hidden');
+                                existingCard.querySelector('.event-details').classList.add('hidden');
                             } else if (existingCard === draggedItem) {
-                                // Dropped on its own slot, do nothing
+                                // Dropped on its own slot, do nothing (already in place)
                             } else {
+                                // Move dragged item to empty slot
                                 if (draggedItem.classList.contains('choices-item')) {
                                     draggedItem.classList.remove('choices-item');
                                 }
                                 targetSlot.appendChild(draggedItem);
                                 draggedItem.classList.remove('correct', 'incorrect');
                                 draggedItem.querySelector('.result-display').classList.add('hidden');
+                                draggedItem.querySelector('.event-details').classList.add('hidden');
                             }
                         } else if (isChoicesContainer) {
+                            // Dropped on choices container
                             if (!draggedItem.classList.contains('choices-item')) {
                                 draggedItem.classList.add('choices-item');
                             }
@@ -657,6 +693,7 @@
                             draggedItem.querySelector('.handle').style.display = 'block';
                             draggedItem.classList.remove('correct', 'incorrect');
                             draggedItem.querySelector('.result-display').classList.add('hidden');
+                            draggedItem.querySelector('.event-details').classList.add('hidden');
                         }
                     }
                     draggedItem = null;
@@ -694,47 +731,51 @@
                 const sortedEvents = [...events].sort((a, b) => a.year - b.year);
                 const timelineSlots = [...timelineContainer.querySelectorAll('.timeline-slot')];
                 
-                timelineSlots.forEach(slot => {
-                    slot.style.borderColor = '#e5e7eb';
-                    slot.style.backgroundColor = '#f9fafb';
-                    const cardInSlot = slot.querySelector('.timeline-item');
-                    if(cardInSlot) {
-                        cardInSlot.classList.remove('correct', 'incorrect');
-                        cardInSlot.querySelector('.result-display').classList.add('hidden');
-                        cardInSlot.draggable = false; 
-                        cardInSlot.removeEventListener('touchstart', handleTouchStart); 
-                        cardInSlot.querySelector('.handle').style.display = 'none'; 
-                    }
-                });
-                document.querySelectorAll('.choices-item').forEach(item => {
+                // Disable dragging and reset styling for all cards (both in slots and choices)
+                document.querySelectorAll('.timeline-item').forEach(item => {
+                    item.classList.remove('correct', 'incorrect');
+                    item.querySelector('.result-display').classList.add('hidden');
+                    item.querySelector('.event-details').classList.add('hidden'); // Hide details initially
                     item.draggable = false; 
                     item.removeEventListener('touchstart', handleTouchStart); 
                     item.querySelector('.handle').style.display = 'none'; 
                 });
 
+                // Check each slot in the timeline
                 timelineSlots.forEach((slot, index) => {
+                    slot.style.borderColor = '#e5e7eb'; // Reset slot border
+                    slot.style.backgroundColor = '#f9fafb'; // Reset slot background
+
                     const cardInSlot = slot.querySelector('.timeline-item');
                     
                     if (cardInSlot) {
                         const itemId = parseInt(cardInSlot.dataset.id);
-                        const correctId = sortedEvents[index].id;
-                        const correctYearCE = sortedEvents[index].year; // Get correct CE year
-                        const correctYearBE = convertCETOBE(correctYearCE); // Convert to BE year
+                        const correctEvent = sortedEvents[index]; // Get the correct event for this slot
+                        const correctId = correctEvent.id;
+                        const correctYearCE = correctEvent.year; 
+                        const correctYearBE = convertCETOBE(correctYearCE); 
 
                         const cardResultDisplay = cardInSlot.querySelector('.result-display');
-                        cardResultDisplay.classList.remove('hidden');
+                        const cardDetailsDisplay = cardInSlot.querySelector('.event-details');
+
+                        cardResultDisplay.classList.remove('hidden'); // Show result message
 
                         if (itemId === correctId) {
                             cardInSlot.classList.add('correct');
                             cardResultDisplay.innerHTML = `<span class="text-green-700"><i class="fas fa-check"></i> ถูกต้อง (พ.ศ. ${correctYearBE} / ค.ศ. ${correctYearCE})</span>`;
+                            cardDetailsDisplay.innerHTML = correctEvent.details;
+                            cardDetailsDisplay.classList.remove('hidden'); // Show details for correct answer
                         } else {
                             cardInSlot.classList.add('incorrect');
-                            const correctEvent = sortedEvents[index]; 
+                            const placedEvent = events.find(e => e.id === itemId); // Find details for the placed event
                             cardResultDisplay.innerHTML = `<span class="text-red-700"><i class="fas fa-times"></i> ปีที่ถูกต้อง: พ.ศ. ${convertCETOBE(correctEvent.year)} / ค.ศ. ${correctEvent.year}</span>`;
+                            cardDetailsDisplay.innerHTML = `**เหตุการณ์ที่คุณเลือก:** ${placedEvent ? placedEvent.details : 'ไม่พบรายละเอียด'}<br><br>**เหตุการณ์ที่ถูกต้อง:** ${correctEvent.details}`;
+                            cardDetailsDisplay.classList.remove('hidden'); // Show details for incorrect answer
                         }
                     } else {
-                        slot.style.borderColor = '#f87171';
-                        slot.style.backgroundColor = '#fee2e2';
+                        // If a slot is empty, style it to indicate missing
+                        slot.style.borderColor = '#f87171'; // Red border
+                        slot.style.backgroundColor = '#fee2e2'; // Light red background
                     }
                 });
                 
