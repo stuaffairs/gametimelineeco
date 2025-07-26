@@ -15,59 +15,6 @@
             background-color: #f5f3ff; /* Violet-50 */
         }
         
-        /* Start Screen Styling */
-        #start-screen {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #f5f3ff;
-            z-index: 100;
-            overflow-y: auto; /* Allow scrolling if many players/small screen */
-            padding: 1rem;
-        }
-
-        #start-screen .start-card {
-            background-color: #fff;
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 600px; /* Wider card for more input fields */
-            width: 100%;
-            margin: auto; /* Center the card */
-        }
-
-        /* Player name input group */
-        .player-input-group {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        @media (min-width: 640px) { /* sm breakpoint */
-            .player-input-group {
-                grid-template-columns: repeat(2, 1fr); /* 2 columns on small screens and up */
-            }
-        }
-        @media (min-width: 1024px) { /* lg breakpoint */
-            .player-input-group {
-                grid-template-columns: repeat(3, 1fr); /* 3 columns on large screens and up */
-            }
-        }
-
-        .player-input-group label {
-            text-align: left;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #4b5563; /* Gray-700 */
-        }
-
         /* Main layout for two columns */
         .two-column-layout {
             display: grid;
@@ -321,22 +268,7 @@
 </head>
 <body class="p-4 sm:p-6 md:p-8">
 
-    <div id="start-screen">
-        <div class="start-card">
-            <h2 class="text-3xl font-bold text-violet-800 mb-6">ยินดีต้อนรับสู่ Timeline Game</h2>
-            <p class="text-gray-600 mb-4">กรุณากรอกชื่อผู้เล่น (อย่างน้อย 1 คน):</p>
-            <div id="player-inputs" class="player-input-group">
-                </div>
-            <button id="add-player-button" class="bg-gray-400 text-white font-bold py-2 px-4 rounded-full hover:bg-gray-500 transition-all text-sm mb-4">
-                <i class="fas fa-plus-circle mr-2"></i>เพิ่มผู้เล่น
-            </button>
-            <button id="start-game-button" class="bg-violet-600 text-white font-bold py-3 px-6 rounded-full hover:bg-violet-700 transition-all text-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                <i class="fas fa-play-circle mr-2"></i> เริ่มเกม
-            </button>
-        </div>
-    </div>
-
-    <div id="game-content" class="hidden max-w-6xl mx-auto">
+    <div id="game-content" class="max-w-6xl mx-auto">
         <div class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-violet-800">Timeline วิวัฒนาการของการเปิดเสรีของระบบเศรษฐกิจไทย</h1>
             <p class="text-gray-600 mt-2 text-lg">ลากการ์ดเหตุการณ์จากฝั่งซ้ายมาเรียงลำดับในช่องด้านขวาให้ถูกต้อง</p>
@@ -366,7 +298,7 @@
         </div>
         
         <div id="result-container" class="text-center mt-8 p-6 bg-white rounded-xl shadow-lg transition-opacity duration-500 opacity-0 hidden">
-            <h3 class="text-2xl font-bold text-violet-700 mb-4">ผลคะแนนผู้เล่นรอบนี้</h3>
+            <h3 class="text-2xl font-bold text-violet-700 mb-4">ผลคะแนนรอบล่าสุด</h3>
             <ul id="current-players-scores-list" class="list-none p-0 mx-auto max-w-sm sm:max-w-md md:max-w-lg">
                 </ul>
             <p class="text-gray-700 text-lg mt-8 font-semibold">คะแนนของผู้เล่นก่อนหน้า:</p>
@@ -399,84 +331,38 @@
             ];
 
             // Accessing elements
-            const startScreen = document.getElementById('start-screen');
-            const playerInputsContainer = document.getElementById('player-inputs');
-            const addPlayerButton = document.getElementById('add-player-button');
-            const startGameButton = document.getElementById('start-game-button');
-            const gameContent = document.getElementById('game-content');
             const choicesContainer = document.getElementById('choices-container');
             const timelineContainer = document.getElementById('timeline-container');
             const checkButton = document.getElementById('check-button');
             const resetButton = document.getElementById('reset-button');
             const resultContainer = document.getElementById('result-container');
             const currentPlayersScoresList = document.getElementById('current-players-scores-list');
-            const previousPlayersList = document.getElementById('previous-players-list');
+            const previousPlayersList = document.getElementById('previous-players-list'); // ยังคงมีไว้เพื่อแสดงคะแนนเก่า
 
             let draggedItem = null; 
-            let currentPlayers = []; 
-            let currentTouch = null; 
-            const MAX_PLAYERS = 7;
-            let autoScrollInterval = null; // New: for auto-scrolling
-            const SCROLL_SPEED = 10; // Pixels per interval
-            const SCROLL_AREA_THRESHOLD = 50; // Pixels from edge to trigger scroll
+            // Removed currentPlayers array as we no longer have multiple players or names
+            let autoScrollInterval = null; 
+            const SCROLL_SPEED = 10; 
+            const SCROLL_AREA_THRESHOLD = 50; 
 
-            // --- Player Input Management ---
-            function createPlayerInput(id) {
-                const div = document.createElement('div');
-                div.className = 'flex flex-col items-start';
-                div.innerHTML = `
-                    <label for="player-name-${id}" class="block text-gray-700 text-sm font-semibold mb-1">ผู้เล่น ${id}:</label>
-                    <input type="text" id="player-name-${id}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-violet-400" placeholder="ชื่อผู้เล่น ${id}" maxlength="20">
-                `;
-                return div;
-            }
-
-            function initializePlayerInputs() {
-                playerInputsContainer.innerHTML = ''; 
-                playerInputsContainer.appendChild(createPlayerInput(1));
-                if (MAX_PLAYERS <= 1) {
-                    addPlayerButton.classList.add('hidden');
-                } else {
-                    addPlayerButton.classList.remove('hidden');
-                }
-            }
-
-            addPlayerButton.addEventListener('click', () => {
-                const currentInputs = playerInputsContainer.querySelectorAll('input[type="text"]').length;
-                if (currentInputs < MAX_PLAYERS) {
-                    playerInputsContainer.appendChild(createPlayerInput(currentInputs + 1));
-                }
-                if (currentInputs + 1 >= MAX_PLAYERS) {
-                    addPlayerButton.classList.add('hidden'); 
-                }
-            });
-
-            // --- Game Initialization and Player Name ---
-            startGameButton.addEventListener('click', () => {
-                console.log('Start Game Button Clicked');
-                currentPlayers = []; 
-                const playerNameInputs = playerInputsContainer.querySelectorAll('input[type="text"]');
-                let atLeastOnePlayer = false;
-
-                playerNameInputs.forEach(input => {
-                    const name = input.value.trim();
-                    if (name) {
-                        currentPlayers.push({ name: name, score: 0 }); 
-                        atLeastOnePlayer = true;
+            // --- Auto-scroll Logic ---
+            function startAutoScroll(direction) {
+                if (autoScrollInterval) clearInterval(autoScrollInterval);
+                autoScrollInterval = setInterval(() => {
+                    if (direction === 'up') {
+                        window.scrollBy(0, -SCROLL_SPEED);
+                    } else if (direction === 'down') {
+                        window.scrollBy(0, SCROLL_SPEED);
                     }
-                });
+                }, 20); 
+            }
 
-                if (atLeastOnePlayer) {
-                    startScreen.classList.add('hidden');
-                    gameContent.classList.remove('hidden');
-                    initializeGame();
-                    console.log('Game Started for players:', currentPlayers.map(p => p.name).join(', '));
-                } else {
-                    alert('กรุณากรอกชื่อผู้เล่นอย่างน้อย 1 คนก่อนเริ่มเกม!');
-                }
-            });
+            function stopAutoScroll() {
+                clearInterval(autoScrollInterval);
+                autoScrollInterval = null;
+            }
 
-            // --- Core Game Functions ---
+            // --- Game Initialization ---
             function createEventCard(event, color) {
                 const item = document.createElement('div');
                 item.className = 'timeline-item'; 
@@ -516,6 +402,7 @@
                 return slot;
             }
 
+            // Game will initialize immediately on load
             function initializeGame() {
                 choicesContainer.innerHTML = '';
                 timelineContainer.innerHTML = '';
@@ -555,23 +442,6 @@
                 choicesContainer.addEventListener('dragenter', () => choicesContainer.style.borderColor = '#a78bfa');
             }
             
-            // --- Auto-scroll Logic ---
-            function startAutoScroll(direction) {
-                if (autoScrollInterval) clearInterval(autoScrollInterval);
-                autoScrollInterval = setInterval(() => {
-                    if (direction === 'up') {
-                        window.scrollBy(0, -SCROLL_SPEED);
-                    } else if (direction === 'down') {
-                        window.scrollBy(0, SCROLL_SPEED);
-                    }
-                }, 20); // Scroll every 20ms
-            }
-
-            function stopAutoScroll() {
-                clearInterval(autoScrollInterval);
-                autoScrollInterval = null;
-            }
-
             // --- Mouse Drag & Drop Handlers ---
             function handleDragStart(e) {
                 draggedItem = e.currentTarget;
@@ -588,10 +458,9 @@
                     slot.style.backgroundColor = '#f9fafb';
                 });
                 choicesContainer.style.borderColor = '#d1d5db';
-                stopAutoScroll(); // Stop auto-scroll on drag end
+                stopAutoScroll(); 
             }
 
-            // Modified: handleSlotDragOver to include auto-scroll for mouse
             function handleSlotDragOver(e) {
                 e.preventDefault(); 
                 e.dataTransfer.dropEffect = "move";
@@ -601,13 +470,12 @@
                     targetSlot.style.backgroundColor = '#ede9fe';
                 }
 
-                // Auto-scroll logic for mouse drag
                 const mouseY = e.clientY;
                 const viewportHeight = window.innerHeight;
 
-                if (mouseY < SCROLL_AREA_THRESHOLD) { // Near top edge
+                if (mouseY < SCROLL_AREA_THRESHOLD) { 
                     startAutoScroll('up');
-                } else if (mouseY > viewportHeight - SCROLL_AREA_THRESHOLD) { // Near bottom edge
+                } else if (mouseY > viewportHeight - SCROLL_AREA_THRESHOLD) { 
                     startAutoScroll('down');
                 } else {
                     stopAutoScroll();
@@ -633,7 +501,7 @@
                 const targetSlot = e.currentTarget;
                 targetSlot.style.borderColor = '#e5e7eb';
                 targetSlot.style.backgroundColor = '#f9fafb';
-                stopAutoScroll(); // Stop auto-scroll on drop
+                stopAutoScroll(); 
 
                 if (draggedItem) {
                     const existingCard = targetSlot.querySelector('.timeline-item');
@@ -658,19 +526,17 @@
                 }
             }
 
-            // Modified: handleChoicesDragOver to include auto-scroll for mouse
             function handleChoicesDragOver(e) {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = "move";
                 choicesContainer.style.borderColor = '#a78bfa';
 
-                // Auto-scroll logic for mouse drag
                 const mouseY = e.clientY;
                 const viewportHeight = window.innerHeight;
 
-                if (mouseY < SCROLL_AREA_THRESHOLD) { // Near top edge
+                if (mouseY < SCROLL_AREA_THRESHOLD) { 
                     startAutoScroll('up');
-                } else if (mouseY > viewportHeight - SCROLL_AREA_THRESHOLD) { // Near bottom edge
+                } else if (mouseY > viewportHeight - SCROLL_AREA_THRESHOLD) { 
                     startAutoScroll('down');
                 } else {
                     stopAutoScroll();
@@ -680,7 +546,7 @@
             function handleChoicesDrop(e) {
                 e.preventDefault();
                 choicesContainer.style.borderColor = '#d1d5db';
-                stopAutoScroll(); // Stop auto-scroll on drop
+                stopAutoScroll(); 
 
                 if (draggedItem) {
                     if (!draggedItem.classList.contains('choices-item')) {
@@ -695,6 +561,7 @@
             }
 
             // --- Touch Drag & Drop Handlers ---
+            let currentTouch = null; // Defined globally for touch events
             function handleTouchStart(e) {
                 if (e.touches.length === 1) {
                     currentTouch = e.touches[0];
@@ -703,29 +570,26 @@
                     
                     const ghost = draggedItem.cloneNode(true);
                     ghost.id = 'drag-ghost';
-                    // Use getComputedStyle to copy actual styles, not just inline
                     const computedStyle = getComputedStyle(draggedItem);
                     for (const prop of computedStyle) {
                         if (['width', 'height', 'padding', 'margin', 'border'].includes(prop) || prop.startsWith('font')) {
                             ghost.style[prop] = computedStyle[prop];
                         }
                     }
-                    // Copy specific classes for content styling (e.g., color)
                     const contentDiv = draggedItem.querySelector('.content');
                     if (contentDiv) {
                         const ghostContentDiv = ghost.querySelector('.content');
                         if (ghostContentDiv) {
-                            ghostContentDiv.className = contentDiv.className; // Copy all classes
+                            ghostContentDiv.className = contentDiv.className; 
                         }
                     }
 
-                    ghost.style.position = 'fixed'; // Ensure fixed positioning for ghost
+                    ghost.style.position = 'fixed'; 
                     ghost.style.width = draggedItem.offsetWidth + 'px';
                     ghost.style.height = draggedItem.offsetHeight + 'px';
                     ghost.style.pointerEvents = 'none'; 
                     ghost.style.zIndex = '9999';
                     ghost.style.opacity = '0.7';
-                    // Keep ghost's content from being affected by handle display none
                     const handleInGhost = ghost.querySelector('.handle');
                     if (handleInGhost) handleInGhost.style.display = 'block';
 
@@ -737,7 +601,6 @@
                 }
             }
 
-            // Modified: handleTouchMove to include auto-scroll for touch
             function handleTouchMove(e) {
                 if (draggedItem && currentTouch) {
                     e.preventDefault(); 
@@ -745,18 +608,16 @@
                     if (ghost) {
                         currentTouch = e.touches[0];
                         const rect = draggedItem.getBoundingClientRect();
-                        // Adjust ghost position by current scroll
                         ghost.style.left = (currentTouch.clientX - rect.width / 2) + 'px';
                         ghost.style.top = (currentTouch.clientY - rect.height / 2) + 'px';
                     }
 
-                    // Auto-scroll logic for touch drag
                     const touchY = currentTouch.clientY;
                     const viewportHeight = window.innerHeight;
 
-                    if (touchY < SCROLL_AREA_THRESHOLD) { // Near top edge
+                    if (touchY < SCROLL_AREA_THRESHOLD) { 
                         startAutoScroll('up');
-                    } else if (touchY > viewportHeight - SCROLL_AREA_THRESHOLD) { // Near bottom edge
+                    } else if (touchY > viewportHeight - SCROLL_AREA_THRESHOLD) { 
                         startAutoScroll('down');
                     } else {
                         stopAutoScroll();
@@ -791,7 +652,7 @@
                     const ghost = document.getElementById('drag-ghost');
                     if (ghost) ghost.remove();
                     draggedItem.classList.remove('dragging');
-                    stopAutoScroll(); // Stop auto-scroll on touch end
+                    stopAutoScroll(); 
 
                     document.querySelectorAll('.timeline-slot').forEach(slot => {
                         slot.style.borderColor = '#e5e7eb';
@@ -799,7 +660,6 @@
                     });
                     choicesContainer.style.borderColor = '#d1d5db';
 
-                    // Use currentTouch.clientX/Y if available, otherwise fall back to e.changedTouches[0]
                     const finalTouch = currentTouch || e.changedTouches[0];
                     const dropTarget = document.elementFromPoint(finalTouch.clientX, finalTouch.clientY);
                     
@@ -876,9 +736,8 @@
             function checkAnswers() {
                 const currentRoundScore = calculateScore();
 
-                currentPlayers.forEach(player => {
-                    player.score = currentRoundScore; 
-                });
+                // Since there are no named players, we save a generic "Player" score for history
+                saveCurrentScoreToHistory(currentRoundScore);
 
                 const sortedEvents = [...events].sort((a, b) => a.year - b.year);
                 const timelineSlots = [...timelineContainer.querySelectorAll('.timeline-slot')];
@@ -927,7 +786,6 @@
                 });
                 
                 showResult(currentRoundScore); 
-                saveCurrentPlayersScores(); 
                 checkButton.classList.add('hidden');
                 resetButton.classList.remove('hidden');
             }
@@ -962,9 +820,14 @@
                     <p class="text-xl mt-2 text-gray-700">คะแนนรอบนี้: <span class="font-bold text-2xl ${rankColor}">${scoreForThisRound}</span> / ${events.length} คะแนน</p>
                     <p class="text-lg mt-1 text-gray-600">${rankDescription}</p>
                     
-                    <h3 class="text-2xl font-bold text-violet-700 mt-6 mb-4">ผู้เล่นในรอบนี้:</h3>
+                    <h3 class="text-2xl font-bold text-violet-700 mt-6 mb-4">ผลคะแนนรอบล่าสุด:</h3>
                     <ul id="current-players-scores-list" class="list-none p-0 mx-auto max-w-sm sm:max-w-md md:max-w-lg">
-                        </ul>
+                        <li>
+                            <span class="text-gray-800 font-bold">ผู้เล่น (ไม่ระบุชื่อ):</span>
+                            <span class="text-violet-700 font-bold text-xl">${scoreForThisRound}</span>
+                            <span class="text-gray-500">คะแนน</span>
+                        </li>
+                    </ul>
 
                     <p class="text-gray-700 text-lg mt-8 font-semibold">คะแนนของผู้เล่นก่อนหน้า:</p>
                     <ul id="previous-players-list" class="list-none p-0 mx-auto max-w-xs sm:max-w-sm md:max-w-md">
@@ -973,39 +836,25 @@
                 resultContainer.classList.remove('hidden');
                 setTimeout(() => resultContainer.classList.remove('opacity-0'), 100);
 
-                displayCurrentPlayersScores(); 
+                // Update previous players list
                 loadAndDisplayPreviousPlayers(); 
             }
 
-            // --- Player Score Management (LocalStorage) ---
-            function saveCurrentPlayersScores() {
+            // --- Score History Management (LocalStorage) ---
+            function saveCurrentScoreToHistory(score) {
                 let playersHistory = JSON.parse(localStorage.getItem('timelinePlayersHistory')) || [];
                 const now = new Date().toLocaleString('th-TH');
 
-                currentPlayers.forEach(player => {
-                    playersHistory.push({ 
-                        name: player.name, 
-                        score: player.score, 
-                        date: now 
-                    });
+                // For a single unnamed player, add a generic entry
+                playersHistory.push({ 
+                    name: "ผู้เล่น (ไม่ระบุชื่อ)", 
+                    score: score, 
+                    date: now 
                 });
                 
+                // Keep history sorted by score (desc) then date (asc)
                 playersHistory.sort((a, b) => b.score - a.score || new Date(a.date).getTime() - new Date(b.date).getTime());
                 localStorage.setItem('timelinePlayersHistory', JSON.stringify(playersHistory));
-            }
-
-            function displayCurrentPlayersScores() {
-                const list = document.getElementById('current-players-scores-list');
-                list.innerHTML = '';
-                currentPlayers.forEach(player => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `
-                        <span class="text-gray-800 font-bold">${player.name}:</span>
-                        <span class="text-violet-700 font-bold text-xl">${player.score}</span>
-                        <span class="text-gray-500">คะแนน</span>
-                    `;
-                    list.appendChild(li);
-                });
             }
 
             function loadAndDisplayPreviousPlayers() {
@@ -1018,6 +867,7 @@
                 let playersHistory = JSON.parse(localStorage.getItem('timelinePlayersHistory')) || [];
                 currentPreviousPlayersList.innerHTML = ''; 
 
+                // Display up to 10 previous scores
                 playersHistory.slice(0, 10).forEach(player => {
                     const li = document.createElement('li');
                     li.innerHTML = `
@@ -1040,15 +890,13 @@
             checkButton.addEventListener('click', checkAnswers);
             resetButton.addEventListener('click', () => {
                 resultContainer.classList.add('hidden', 'opacity-0');
-                gameContent.classList.add('hidden');
-                startScreen.classList.remove('hidden');
-                initializePlayerInputs(); 
-                currentPlayers = []; 
+                // The game content is always visible now, just re-initialize its state
+                initializeGame(); 
                 loadAndDisplayPreviousPlayers(); 
             });
 
-            // Initial setup
-            initializePlayerInputs(); 
+            // Initial setup - Start game immediately on DOMContentLoaded
+            initializeGame(); 
             loadAndDisplayPreviousPlayers(); 
         });
     </script>
