@@ -15,76 +15,91 @@
             background-color: #f5f3ff; /* Violet-50 */
         }
         
+        /* Start Screen Styling */
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #f5f3ff;
+            z-index: 100;
+        }
+
         /* Main layout for two columns */
         .two-column-layout {
             display: grid;
             grid-template-columns: 1fr; /* Default to single column on small screens */
-            gap: 2rem;
+            gap: 1.5rem; /* Reduced gap for mobile */
         }
         @media (min-width: 1024px) { /* Adjust breakpoint as needed, 'lg' for Tailwind */
             .two-column-layout {
                 grid-template-columns: 1fr 1fr; /* Two columns on larger screens */
+                gap: 2rem;
             }
         }
 
         #choices-container {
-            min-height: 400px; /* เพิ่ม min-height ให้เห็นพื้นที่ชัดเจน */
+            min-height: 300px; /* Adjusted min-height for responsiveness */
             border: 2px dashed #d1d5db; /* Gray-300 */
             border-radius: 0.75rem;
-            padding: 1rem;
+            padding: 0.75rem; /* Adjusted padding */
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-            display: flex; /* เพื่อจัดเรียงการ์ดภายใน */
-            flex-wrap: wrap; /* ให้การ์ดขึ้นบรรทัดใหม่ได้ */
-            align-content: flex-start; /* จัดการ์ดชิดบน */
-            justify-content: center; /* จัดกลางในแนวนอน */
-            gap: 0.75rem; /* ระยะห่างระหว่างการ์ด */
-            /* Add this line to allow dropping anywhere in the container */
-            align-items: flex-start; /* Ensures items are at the top */
+            display: flex; /* To arrange cards inside */
+            flex-wrap: wrap; /* Allow cards to wrap to next line */
+            align-content: flex-start; /* Align cards to the top */
+            justify-content: center; /* Center horizontally */
+            gap: 0.5rem; /* Reduced gap between cards */
+            align-items: flex-start; 
         }
 
         #timeline-container {
             position: relative;
             background-color: #fff;
             border-radius: 0.75rem;
-            padding: 1rem;
+            padding: 0.75rem; /* Adjusted padding */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
-
-        .timeline-slot {
-            position: relative;
-            padding-left: 5.5rem; /* เพิ่ม padding เพื่อให้มีที่ว่างสำหรับเลขและวงกลม */
-            margin-bottom: 0.75rem; /* ระยะห่างระหว่างช่อง */
-            min-height: 80px; /* กำหนดขั้นต่ำเพื่อให้ช่องกว้างพอ */
-            display: flex;
-            align-items: center; /* จัดการ์ดและเลขให้อยู่กลางช่อง */
-            border: 1px dashed #e5e7eb; /* Border สำหรับช่องว่าง */
-            border-radius: 0.5rem;
-            background-color: #f9fafb; /* Light background for slots */
-            transition: border-color 0.2s, background-color 0.2s; /* เพิ่ม transition */
-        }
+        
         /* Style for the vertical line on the timeline container itself */
         #timeline-container::before {
             content: '';
             position: absolute;
-            top: 1rem; /* Start from the padding of the container */
-            bottom: 1rem; /* End at the padding of the container */
-            left: 2.5rem; /* Center with the circles */
+            top: 0.75rem; /* Start from the padding of the container */
+            bottom: 0.75rem; /* End at the padding of the container */
+            left: 2.25rem; /* Center with the circles */
             width: 4px;
             background-color: #c4b5fd; /* Violet-300 */
             border-radius: 2px;
             z-index: 0; /* Make sure it's behind the slots */
         }
 
+        .timeline-slot {
+            position: relative;
+            padding-left: 5rem; /* Adjusted padding for smaller screens */
+            margin-bottom: 0.6rem; /* Reduced margin-bottom */
+            min-height: 70px; /* Adjusted min-height for responsiveness */
+            display: flex;
+            align-items: center; /* Center card and number */
+            border: 1px dashed #e5e7eb; /* Border for empty slots */
+            border-radius: 0.5rem;
+            background-color: #f9fafb; /* Light background for slots */
+            transition: border-color 0.2s, background-color 0.2s; /* Add transition */
+        }
 
         .timeline-slot::before {
-            content: attr(data-slot-number); /* ดึงเลขจาก data attribute แทน counter */
+            content: attr(data-slot-number); /* Get number from data attribute */
             position: absolute;
-            left: 2.5rem; /* ตำแหน่งของเลขข้อ */
+            left: 2.25rem; /* Position of the number */
             top: 50%;
             transform: translate(-50%, -50%);
-            width: 40px;
-            height: 40px;
+            width: 36px; /* Adjusted size for mobile */
+            height: 36px; /* Adjusted size for mobile */
             background-color: #a78bfa; /* Violet-400 */
             color: white;
             border-radius: 50%;
@@ -92,27 +107,27 @@
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 1.125rem;
+            font-size: 1rem; /* Adjusted font size for mobile */
             border: 4px solid #f5f3ff;
             z-index: 1; /* Make sure number is above the line */
         }
 
         .timeline-item {
-            width: 100%; /* ให้การ์ดเต็มความกว้างของ slot */
-            box-sizing: border-box; /* รวม padding/border ใน width */
+            width: 100%; /* Card fills the width of the slot */
+            box-sizing: border-box; /* Include padding/border in width */
             transition: transform 0.2s ease-in-out;
             cursor: grab;
-            margin: 0; /* ลบ margin เดิมออก */
-            padding: 0; /* ลบ padding เดิมออก */
-            position: relative; /* เพื่อจัด z-index */
-            z-index: 2; /* ให้การ์ดอยู่เหนือเส้น */
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
+            position: relative; 
+            z-index: 2; /* Card above the line */
         }
         
         /* Style for the content inside timeline-item */
         .timeline-item .content {
             border-radius: 0.75rem;
-            padding: 1rem 1.5rem;
-            box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.07);
+            padding: 0.8rem 1.2rem; /* Adjusted padding for responsiveness */
+            box-shadow: 0 3px 8px -1px rgba(0, 0, 0, 0.06); /* Adjusted shadow */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -120,16 +135,36 @@
             text-align: center;
             transition: border-color 0.3s, background-color 0.3s;
             border: 1px solid transparent;
+            font-size: 0.95rem; /* Adjusted font size for responsiveness */
+        }
+        @media (min-width: 768px) { /* Medium screens */
+            .timeline-item .content {
+                font-size: 1rem;
+                padding: 1rem 1.5rem;
+            }
         }
 
+
         .choices-item { /* Card in the choices container */
-            width: calc(50% - 0.75rem); /* 2 cards per row in choices container */
-            min-width: 160px; /* Minimum width for smaller screens */
+            width: calc(100% - 0.5rem); /* Single card per row on mobile */
+            min-width: 150px; 
             flex-grow: 1;
             transition: transform 0.2s ease-in-out;
             cursor: grab;
-            margin-bottom: 0.75rem; /* Margin between cards in choices */
+            margin-bottom: 0.5rem; /* Margin between cards in choices */
         }
+        @media (min-width: 640px) { /* Small screens (sm) */
+            .choices-item {
+                width: calc(50% - 0.5rem); /* 2 cards per row */
+            }
+        }
+        @media (min-width: 1024px) { /* Large screens (lg) */
+            .choices-item {
+                width: calc(50% - 0.75rem); /* Back to original for desktop */
+                margin-bottom: 0.75rem;
+            }
+        }
+
 
         .choices-item .content { /* Content style for choices cards */
             border-radius: 0.75rem;
@@ -142,7 +177,14 @@
             text-align: center;
             transition: border-color 0.3s, background-color 0.3s;
             border: 1px solid transparent;
+            font-size: 0.9rem; /* Smaller font size for choices cards */
         }
+        @media (min-width: 768px) {
+            .choices-item .content {
+                font-size: 0.95rem;
+            }
+        }
+
 
         .dragging {
             opacity: 0.8;
@@ -164,19 +206,68 @@
             margin-top: 0.5rem;
             align-self: flex-end;
             cursor: grab; /* Ensure grab cursor on handle */
+            font-size: 0.8rem; /* Smaller handle for mobile */
         }
+        @media (min-width: 768px) {
+            .handle {
+                font-size: 1rem; /* Larger handle for desktop */
+            }
+        }
+
         .result-display {
-            padding-left: 1rem;
+            padding-left: 0.5rem; /* Adjusted padding */
             font-weight: 500;
             margin-top: 0.25rem;
             text-align: left;
             width: 100%;
+            font-size: 0.8rem; /* Smaller font for result display */
+        }
+        @media (min-width: 768px) {
+            .result-display {
+                padding-left: 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Styling for player list in result container */
+        #previous-players-list {
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            border: 1px solid #e2e8f0; /* Gray-200 */
+            border-radius: 0.5rem;
+            background-color: #f8fafc; /* Gray-50 */
+            font-size: 0.9rem;
+        }
+        #previous-players-list li {
+            padding: 0.3rem 0;
+            border-bottom: 1px dashed #edf2f7; /* Gray-100 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #previous-players-list li:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
 <body class="p-4 sm:p-6 md:p-8">
 
-    <div class="max-w-6xl mx-auto">
+    <div id="start-screen">
+        <div class="bg-white p-8 rounded-lg shadow-xl text-center max-w-sm w-full mx-4">
+            <h2 class="text-3xl font-bold text-violet-800 mb-6">ยินดีต้อนรับ</h2>
+            <div class="mb-4 text-left">
+                <label for="player-name" class="block text-gray-700 text-lg font-semibold mb-2">กรุณาใส่ชื่อของคุณ:</label>
+                <input type="text" id="player-name" class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-violet-400" placeholder="ชื่อเล่น หรือ นามแฝง" maxlength="20">
+            </div>
+            <button id="start-game-button" class="bg-violet-600 text-white font-bold py-3 px-6 rounded-full hover:bg-violet-700 transition-all text-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                <i class="fas fa-play-circle mr-2"></i> เริ่มเกม
+            </button>
+        </div>
+    </div>
+
+    <div id="game-content" class="hidden max-w-6xl mx-auto">
         <div class="text-center mb-8">
             <h1 class="text-3xl md:text-4xl font-bold text-violet-800">Timeline วิวัฒนาการของการเปิดเสรีของระบบเศรษฐกิจไทย</h1>
             <p class="text-gray-600 mt-2 text-lg">ลากการ์ดเหตุการณ์จากฝั่งซ้ายมาเรียงลำดับในช่องด้านขวาให้ถูกต้อง</p>
@@ -185,7 +276,7 @@
         <div class="two-column-layout">
             <div>
                 <h2 class="text-xl font-semibold text-gray-700 mb-3 text-center">ตัวเลือกเหตุการณ์</h2>
-                <div id="choices-container" ondragover="event.preventDefault();" ondrop="handleChoicesDrop(event);" ondragleave="this.style.borderColor='#d1d5db';" ondragenter="this.style.borderColor='#a78bfa';">
+                <div id="choices-container">
                     </div>
             </div>
 
@@ -206,7 +297,10 @@
         </div>
         
         <div id="result-container" class="text-center mt-8 p-6 bg-white rounded-xl shadow-lg transition-opacity duration-500 opacity-0 hidden">
-            </div>
+            <p class="text-gray-700 text-lg mt-4 font-semibold">คะแนนของผู้เล่นก่อนหน้า:</p>
+            <ul id="previous-players-list" class="list-none p-0 mx-auto max-w-xs sm:max-w-sm md:max-w-md">
+                </ul>
+        </div>
     </div>
 
     <script>
@@ -232,18 +326,39 @@
                 'bg-cyan-100', 'bg-lime-100', 'bg-orange-100', 'bg-rose-100'
             ];
 
+            const startScreen = document.getElementById('start-screen');
+            const playerNameInput = document.getElementById('player-name');
+            const startGameButton = document.getElementById('start-game-button');
+            const gameContent = document.getElementById('game-content');
             const choicesContainer = document.getElementById('choices-container');
             const timelineContainer = document.getElementById('timeline-container');
             const checkButton = document.getElementById('check-button');
             const resetButton = document.getElementById('reset-button');
             const resultContainer = document.getElementById('result-container');
-            let draggedItem = null; // Reference to the currently dragged element
+            const previousPlayersList = document.getElementById('previous-players-list');
 
-            // Function to create an event card
+            let draggedItem = null; // Reference to the currently dragged element
+            let currentPlayerName = '';
+            let currentTouch = null; // For touch events
+
+            // --- Game Initialization and Player Name ---
+            startGameButton.addEventListener('click', () => {
+                const name = playerNameInput.value.trim();
+                if (name) {
+                    currentPlayerName = name;
+                    startScreen.classList.add('hidden');
+                    gameContent.classList.remove('hidden');
+                    initializeGame();
+                } else {
+                    alert('กรุณากรอกชื่อก่อนเริ่มเกม!');
+                }
+            });
+
+            // --- Core Game Functions ---
             function createEventCard(event, color) {
                 const item = document.createElement('div');
-                item.className = 'timeline-item'; // Base class for all cards
-                item.draggable = true;
+                item.className = 'timeline-item'; 
+                item.draggable = true; // Still draggable for mouse
                 item.dataset.id = event.id;
                 item.dataset.year = event.year;
 
@@ -254,22 +369,33 @@
                     </div>
                     <div class="result-display hidden"></div>
                 `;
+
+                // Add touch event listeners to the card itself
+                item.addEventListener('touchstart', handleTouchStart);
+                item.addEventListener('touchmove', handleTouchMove);
+                item.addEventListener('touchend', handleTouchEnd);
+                item.addEventListener('touchcancel', handleTouchEnd);
+
                 return item;
             }
 
-            // Function to create a timeline slot (on the right side)
             function createTimelineSlot(index) {
                 const slot = document.createElement('div');
                 slot.className = 'timeline-slot';
-                slot.dataset.slotNumber = index + 1; // Store slot number as data attribute
+                slot.dataset.slotNumber = index + 1;
                 slot.addEventListener('dragover', handleSlotDragOver);
                 slot.addEventListener('drop', handleSlotDrop);
                 slot.addEventListener('dragleave', handleSlotDragLeave);
                 slot.addEventListener('dragenter', handleSlotDragEnter);
+
+                // Add touch event listeners to slots (as drop targets)
+                slot.addEventListener('touchmove', (e) => e.preventDefault()); // Prevent scrolling while dragging over slot
+                slot.addEventListener('touchend', handleTouchEndOnSlot); // Handle drop for touch
+                slot.addEventListener('touchcancel', handleTouchEndOnSlot);
+
                 return slot;
             }
 
-            // Initializes the game state
             function initializeGame() {
                 choicesContainer.innerHTML = '';
                 timelineContainer.innerHTML = '';
@@ -277,50 +403,54 @@
                 checkButton.classList.remove('hidden');
                 resetButton.classList.add('hidden');
 
-                // 1. Create 12 empty slots on the right timeline
+                // Create 12 empty slots on the right timeline
                 for (let i = 0; i < events.length; i++) {
                     timelineContainer.appendChild(createTimelineSlot(i));
                 }
 
-                // 2. Shuffle events and colors, then create cards and place them in the choices container
+                // Shuffle events and colors, then create cards and place them in the choices container
                 const shuffledEvents = [...events].sort(() => Math.random() - 0.5);
                 const shuffledColors = [...cardColors].sort(() => Math.random() - 0.5);
 
                 shuffledEvents.forEach((event, index) => {
                     const card = createEventCard(event, shuffledColors[index % shuffledColors.length]);
-                    card.classList.add('choices-item'); // Add class for styling in choices container
+                    card.classList.add('choices-item');
                     choicesContainer.appendChild(card);
                 });
 
-                addDragListeners(); // Add drag listeners to all newly created cards
+                // Add drag listeners for mouse events
+                addMouseDragListeners();
+
+                // Add touch listeners for choices container (as a drop target)
+                choicesContainer.addEventListener('touchmove', (e) => e.preventDefault());
+                choicesContainer.addEventListener('touchend', handleTouchEndOnChoices);
+                choicesContainer.addEventListener('touchcancel', handleTouchEndOnChoices);
             }
 
-            // Attaches dragstart and dragend listeners to all cards
-            function addDragListeners() {
-                const allItems = document.querySelectorAll('.timeline-item'); // Select all cards (both in choices and slots)
+            function addMouseDragListeners() {
+                const allItems = document.querySelectorAll('.timeline-item');
                 allItems.forEach(item => {
                     item.addEventListener('dragstart', handleDragStart);
                     item.addEventListener('dragend', handleDragEnd);
                 });
+                // Add dragover/drop listener for choicesContainer
+                choicesContainer.addEventListener('dragover', handleChoicesDragOver);
+                choicesContainer.addEventListener('drop', handleChoicesDrop);
+                choicesContainer.addEventListener('dragleave', () => choicesContainer.style.borderColor = '#d1d5db');
+                choicesContainer.addEventListener('dragenter', () => choicesContainer.style.borderColor = '#a78bfa');
             }
             
-            // Event handler when dragging starts
+            // --- Mouse Drag & Drop Handlers ---
             function handleDragStart(e) {
                 draggedItem = e.currentTarget;
-                setTimeout(() => {
-                    draggedItem.classList.add('dragging');
-                }, 0);
+                setTimeout(() => { draggedItem.classList.add('dragging'); }, 0);
                 e.dataTransfer.effectAllowed = "move";
-                e.dataTransfer.setData("text/plain", draggedItem.id); // Required for drag and drop
+                e.dataTransfer.setData("text/plain", draggedItem.id); 
             }
 
-            // Event handler when dragging ends
             function handleDragEnd() {
-                if(draggedItem) {
-                   draggedItem.classList.remove('dragging');
-                }
+                if(draggedItem) { draggedItem.classList.remove('dragging'); }
                 draggedItem = null;
-                // Reset border colors for all slots and choices container
                 document.querySelectorAll('.timeline-slot').forEach(slot => {
                     slot.style.borderColor = '#e5e7eb';
                     slot.style.backgroundColor = '#f9fafb';
@@ -328,15 +458,13 @@
                 choicesContainer.style.borderColor = '#d1d5db';
             }
 
-            // Event handlers for dragover, dragenter, dragleave on timeline slots
             function handleSlotDragOver(e) {
-                e.preventDefault(); // Allow drop
+                e.preventDefault(); 
                 e.dataTransfer.dropEffect = "move";
                 const targetSlot = e.currentTarget;
-                // If the slot is empty, highlight it
                 if (!targetSlot.querySelector('.timeline-item') && draggedItem) {
-                    targetSlot.style.borderColor = '#a78bfa'; // Violet-400
-                    targetSlot.style.backgroundColor = '#ede9fe'; // Violet-100
+                    targetSlot.style.borderColor = '#a78bfa';
+                    targetSlot.style.backgroundColor = '#ede9fe';
                 }
             }
 
@@ -354,74 +482,197 @@
                 targetSlot.style.backgroundColor = '#f9fafb';
             }
 
-            // Event handler for dropping on a timeline slot
             function handleSlotDrop(e) {
                 e.preventDefault();
                 const targetSlot = e.currentTarget;
-                // Reset slot highlight
                 targetSlot.style.borderColor = '#e5e7eb';
                 targetSlot.style.backgroundColor = '#f9fafb';
 
                 if (draggedItem) {
                     const existingCard = targetSlot.querySelector('.timeline-item');
                     
-                    if (existingCard && existingCard !== draggedItem) { // If slot has an existing card AND it's not the dragged card itself
-                        // Move the existing card back to the choices container
+                    if (existingCard && existingCard !== draggedItem) {
                         choicesContainer.appendChild(existingCard);
-                        existingCard.classList.add('choices-item'); // Restore choices styling
-                        existingCard.draggable = true; // Make it draggable again
-                        existingCard.querySelector('.handle').style.display = 'block'; // Show handle
-                        existingCard.classList.remove('correct', 'incorrect'); // Clear result styles
-                        existingCard.querySelector('.result-display').classList.add('hidden'); // Hide result text
+                        existingCard.classList.add('choices-item');
+                        existingCard.draggable = true;
+                        existingCard.querySelector('.handle').style.display = 'block';
+                        existingCard.classList.remove('correct', 'incorrect');
+                        existingCard.querySelector('.result-display').classList.add('hidden');
                     } else if (existingCard === draggedItem) {
-                        // If dropping into the same slot it came from, do nothing special
                         return;
                     }
-
-                    // Place the dragged card into the target slot
+                    
                     if (draggedItem.classList.contains('choices-item')) {
-                        draggedItem.classList.remove('choices-item'); // Remove choices styling
+                        draggedItem.classList.remove('choices-item');
                     }
                     targetSlot.appendChild(draggedItem);
-
-                    // Reset styling for the dropped card
                     draggedItem.classList.remove('correct', 'incorrect');
                     draggedItem.querySelector('.result-display').classList.add('hidden');
                 }
             }
 
-            // Event handlers for dragover, drop on choices container
             function handleChoicesDragOver(e) {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = "move";
-                choicesContainer.style.borderColor = '#a78bfa'; // Highlight choices container
+                choicesContainer.style.borderColor = '#a78bfa';
             }
 
             function handleChoicesDrop(e) {
                 e.preventDefault();
-                choicesContainer.style.borderColor = '#d1d5db'; // Reset border color
+                choicesContainer.style.borderColor = '#d1d5db';
 
                 if (draggedItem) {
                     if (!draggedItem.classList.contains('choices-item')) {
-                        draggedItem.classList.add('choices-item'); // Add choices styling
+                        draggedItem.classList.add('choices-item');
                     }
-                    choicesContainer.appendChild(draggedItem); // Append to choices container
-                    
-                    // Reset styling for the dropped card
-                    draggedItem.draggable = true; // Make draggable again
-                    draggedItem.querySelector('.handle').style.display = 'block'; // Show handle
-                    draggedItem.classList.remove('correct', 'incorrect'); // Clear result styles
-                    draggedItem.querySelector('.result-display').classList.add('hidden'); // Hide result text
+                    choicesContainer.appendChild(draggedItem);
+                    draggedItem.draggable = true;
+                    draggedItem.querySelector('.handle').style.display = 'block';
+                    draggedItem.classList.remove('correct', 'incorrect');
+                    draggedItem.querySelector('.result-display').classList.add('hidden');
                 }
             }
 
+            // --- Touch Drag & Drop Handlers ---
+            function handleTouchStart(e) {
+                // Only allow one touch for dragging at a time
+                if (e.touches.length === 1) {
+                    currentTouch = e.touches[0];
+                    draggedItem = e.currentTarget;
+                    draggedItem.classList.add('dragging');
+                    // Create a "ghost" element for visual feedback
+                    const ghost = draggedItem.cloneNode(true);
+                    ghost.id = 'drag-ghost';
+                    ghost.style.position = 'absolute';
+                    ghost.style.width = draggedItem.offsetWidth + 'px';
+                    ghost.style.height = draggedItem.offsetHeight + 'px';
+                    ghost.style.pointerEvents = 'none'; // Don't block touch events below
+                    ghost.style.zIndex = '9999';
+                    ghost.style.opacity = '0.7';
+                    document.body.appendChild(ghost);
 
-            // Checks the user's answers against the correct timeline
+                    // Position the ghost
+                    const rect = draggedItem.getBoundingClientRect();
+                    ghost.style.left = (currentTouch.clientX - rect.width / 2) + 'px';
+                    ghost.style.top = (currentTouch.clientY - rect.height / 2) + 'px';
+                }
+            }
+
+            function handleTouchMove(e) {
+                if (draggedItem && currentTouch) {
+                    e.preventDefault(); // Prevent scrolling
+                    const ghost = document.getElementById('drag-ghost');
+                    if (ghost) {
+                        currentTouch = e.touches[0];
+                        const rect = draggedItem.getBoundingClientRect();
+                        ghost.style.left = (currentTouch.clientX - rect.width / 2) + 'px';
+                        ghost.style.top = (currentTouch.clientY - rect.height / 2) + 'px';
+                    }
+
+                    // Highlight drop targets while dragging
+                    document.querySelectorAll('.timeline-slot').forEach(slot => {
+                        const slotRect = slot.getBoundingClientRect();
+                        if (currentTouch.clientX > slotRect.left && currentTouch.clientX < slotRect.right &&
+                            currentTouch.clientY > slotRect.top && currentTouch.clientY < slotRect.bottom) {
+                            if (!slot.querySelector('.timeline-item')) { // Only highlight empty slots
+                                slot.style.borderColor = '#a78bfa';
+                                slot.style.backgroundColor = '#ede9fe';
+                            }
+                        } else {
+                            slot.style.borderColor = '#e5e7eb';
+                            slot.style.backgroundColor = '#f9fafb';
+                        }
+                    });
+
+                    const choicesRect = choicesContainer.getBoundingClientRect();
+                    if (currentTouch.clientX > choicesRect.left && currentTouch.clientX < choicesRect.right &&
+                        currentTouch.clientY > choicesRect.top && currentTouch.clientY < choicesRect.bottom) {
+                        choicesContainer.style.borderColor = '#a78bfa';
+                    } else {
+                        choicesContainer.style.borderColor = '#d1d5db';
+                    }
+                }
+            }
+
+            function handleTouchEnd(e) {
+                if (draggedItem) {
+                    const ghost = document.getElementById('drag-ghost');
+                    if (ghost) ghost.remove();
+                    draggedItem.classList.remove('dragging');
+
+                    // Reset highlight on all slots and choices container
+                    document.querySelectorAll('.timeline-slot').forEach(slot => {
+                        slot.style.borderColor = '#e5e7eb';
+                        slot.style.backgroundColor = '#f9fafb';
+                    });
+                    choicesContainer.style.borderColor = '#d1d5db';
+
+                    // Determine drop target for touch event
+                    const dropTarget = document.elementFromPoint(currentTouch.clientX, currentTouch.clientY);
+                    
+                    if (dropTarget) {
+                        let targetSlot = null;
+                        let isChoicesContainer = false;
+
+                        // Check if dropped on a timeline slot or the choices container
+                        if (dropTarget.closest('.timeline-slot')) {
+                            targetSlot = dropTarget.closest('.timeline-slot');
+                        } else if (dropTarget.closest('#choices-container')) {
+                            isChoicesContainer = true;
+                        }
+
+                        if (targetSlot) {
+                            // Simulate handleSlotDrop
+                            const existingCard = targetSlot.querySelector('.timeline-item');
+                            
+                            if (existingCard && existingCard !== draggedItem) {
+                                choicesContainer.appendChild(existingCard);
+                                existingCard.classList.add('choices-item');
+                                // Enable drag again for the card moved back
+                                existingCard.draggable = true; 
+                                existingCard.querySelector('.handle').style.display = 'block';
+                                existingCard.classList.remove('correct', 'incorrect');
+                                existingCard.querySelector('.result-display').classList.add('hidden');
+                            } else if (existingCard === draggedItem) {
+                                // Dropped on its own slot, do nothing
+                            } else {
+                                // Slot is empty, place the card
+                                if (draggedItem.classList.contains('choices-item')) {
+                                    draggedItem.classList.remove('choices-item');
+                                }
+                                targetSlot.appendChild(draggedItem);
+                                draggedItem.classList.remove('correct', 'incorrect');
+                                draggedItem.querySelector('.result-display').classList.add('hidden');
+                            }
+                        } else if (isChoicesContainer) {
+                            // Simulate handleChoicesDrop
+                            if (!draggedItem.classList.contains('choices-item')) {
+                                draggedItem.classList.add('choices-item');
+                            }
+                            choicesContainer.appendChild(draggedItem);
+                            draggedItem.draggable = true;
+                            draggedItem.querySelector('.handle').style.display = 'block';
+                            draggedItem.classList.remove('correct', 'incorrect');
+                            draggedItem.querySelector('.result-display').classList.add('hidden');
+                        }
+                    }
+                    draggedItem = null;
+                    currentTouch = null;
+                }
+            }
+
+            // These are not directly used now that handleTouchEnd covers the drop logic
+            // But kept for structure/completeness if needed in future.
+            function handleTouchEndOnSlot(e) { /* Handled by handleTouchEnd */ }
+            function handleTouchEndOnChoices(e) { /* Handled by handleTouchEnd */ }
+
+
+            // --- Game Logic and Scoring ---
             function checkAnswers() {
                 let correctCount = 0;
-                const sortedEvents = [...events].sort((a, b) => a.year - b.year); // Correct order
-                const timelineSlots = [...timelineContainer.querySelectorAll('.timeline-slot')]; // User's timeline
-
+                const sortedEvents = [...events].sort((a, b) => a.year - b.year);
+                const timelineSlots = [...timelineContainer.querySelectorAll('.timeline-slot')];
+                
                 // Reset all slot/card styles before re-checking
                 timelineSlots.forEach(slot => {
                     slot.style.borderColor = '#e5e7eb';
@@ -431,14 +682,15 @@
                         cardInSlot.classList.remove('correct', 'incorrect');
                         cardInSlot.querySelector('.result-display').classList.add('hidden');
                         cardInSlot.draggable = false; // Make cards non-draggable after checking
+                        cardInSlot.removeEventListener('touchstart', handleTouchStart); // Disable touch drag
                         cardInSlot.querySelector('.handle').style.display = 'none'; // Hide handle
                     }
                 });
                 document.querySelectorAll('.choices-item').forEach(item => {
                     item.draggable = false; // Make choices non-draggable after checking
+                    item.removeEventListener('touchstart', handleTouchStart); // Disable touch drag
                     item.querySelector('.handle').style.display = 'none'; // Hide handle
                 });
-
 
                 timelineSlots.forEach((slot, index) => {
                     const cardInSlot = slot.querySelector('.timeline-item');
@@ -449,7 +701,7 @@
                         const correctYear = sortedEvents[index].year;
 
                         const cardResultDisplay = cardInSlot.querySelector('.result-display');
-                        cardResultDisplay.classList.remove('hidden'); // Show result text on card
+                        cardResultDisplay.classList.remove('hidden');
 
                         if (itemId === correctId) {
                             cardInSlot.classList.add('correct');
@@ -458,36 +710,37 @@
                         } else {
                             cardInSlot.classList.add('incorrect');
                             const actualEvent = events.find(e => e.id === itemId);
-                            cardResultDisplay.innerHTML = `<span class="text-red-700"><i class="fas fa-times"></i> ปีที่ถูกต้อง: พ.ศ. ${correctEvent.year}</span>`;
+                            cardResultDisplay.innerHTML = `<span class="text-red-700"><i class="fas fa-times"></i> ปีที่ถูกต้อง: พ.ศ. ${actualEvent.year}</span>`;
                         }
                     } else {
                         // If slot is empty, mark the slot itself as incorrect
-                        slot.style.borderColor = '#f87171'; /* Red border */
-                        slot.style.backgroundColor = '#fee2e2'; /* Light red background */
+                        slot.style.borderColor = '#f87171';
+                        slot.style.backgroundColor = '#fee2e2';
                     }
                 });
                 
                 showResult(correctCount);
+                savePlayerScore(currentPlayerName, correctCount); // Save score
+                loadAndDisplayPreviousPlayers(); // Display updated list
 
                 checkButton.classList.add('hidden');
                 resetButton.classList.remove('hidden');
             }
             
-            // Displays the final score and rank
             function showResult(score) {
                 let rankTitle, rankDescription, rankColor, rankEmoji;
 
-                if (score === events.length) { // All correct
+                if (score === events.length) { 
                     rankTitle = 'ตัวท็อปเศรษฐกิจไทย';
                     rankDescription = 'ความรู้ของคุณเฉียบคมมาก!';
                     rankColor = 'text-green-500';
                     rankEmoji = '👑';
-                } else if (score >= events.length * 0.7) { // 70% or more
+                } else if (score >= events.length * 0.7) { 
                     rankTitle = 'ผู้บริหารเศรษฐกิจมือทอง';
                     rankDescription = 'คุณมีความเข้าใจในภาพรวมเศรษฐกิจเป็นอย่างดี';
                     rankColor = 'text-blue-500';
                     rankEmoji = '💼';
-                } else if (score >= events.length * 0.3) { // 30% or more
+                } else if (score >= events.length * 0.3) { 
                     rankTitle = 'พนักงานปฏิบัติการด้านเศรษฐกิจ';
                     rankDescription = 'ทำได้ดี! ยังมีโอกาสเรียนรู้เพิ่มเติมได้อีกนะ';
                     rankColor = 'text-yellow-500';
@@ -503,16 +756,60 @@
                     <h3 class="text-3xl font-bold ${rankColor}">${rankEmoji} ${rankTitle} ${rankEmoji}</h3>
                     <p class="text-xl mt-2 text-gray-700">คุณทำได้ <span class="font-bold text-2xl ${rankColor}">${score}</span> / ${events.length} คะแนน</p>
                     <p class="text-lg mt-1 text-gray-600">${rankDescription}</p>
+                    <p class="text-gray-700 text-lg mt-4 font-semibold">คะแนนของผู้เล่นก่อนหน้า:</p>
+                    <ul id="previous-players-list" class="list-none p-0 mx-auto max-w-xs sm:max-w-sm md:max-w-md">
+                        </ul>
                 `;
                 resultContainer.classList.remove('hidden');
                 setTimeout(() => resultContainer.classList.remove('opacity-0'), 100);
             }
 
-            // Event listeners for buttons
-            checkButton.addEventListener('click', checkAnswers);
-            resetButton.addEventListener('click', initializeGame);
+            // --- Player Score Management (LocalStorage) ---
+            function savePlayerScore(name, score) {
+                let players = JSON.parse(localStorage.getItem('timelinePlayers')) || [];
+                const newPlayer = { name: name, score: score, date: new Date().toLocaleString('th-TH') };
+                players.push(newPlayer);
+                // Sort by score (descending), then by date (ascending) for ties
+                players.sort((a, b) => b.score - a.score || new Date(a.date).getTime() - new Date(b.date).getTime());
+                localStorage.setItem('timelinePlayers', JSON.stringify(players));
+            }
 
-            initializeGame(); // Start the game when the DOM is fully loaded
+            function loadAndDisplayPreviousPlayers() {
+                let players = JSON.parse(localStorage.getItem('timelinePlayers')) || [];
+                previousPlayersList.innerHTML = ''; // Clear previous list
+
+                // Display top 10 players
+                players.slice(0, 10).forEach(player => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span class="text-gray-800 font-medium">${player.name}</span>
+                        <span class="text-violet-700 font-bold">${player.score} คะแนน</span>
+                        <span class="text-gray-500 text-sm">${player.date.split(',')[0]}</span>
+                    `;
+                    previousPlayersList.appendChild(li);
+                });
+
+                if (players.length === 0) {
+                    const li = document.createElement('li');
+                    li.textContent = 'ยังไม่มีผู้เล่นก่อนหน้า';
+                    previousPlayersList.appendChild(li);
+                }
+            }
+
+
+            // --- Button Event Listeners ---
+            checkButton.addEventListener('click', checkAnswers);
+            resetButton.addEventListener('click', () => {
+                // Hide result container, show start screen to get new name
+                resultContainer.classList.add('hidden', 'opacity-0');
+                gameContent.classList.add('hidden');
+                startScreen.classList.remove('hidden');
+                playerNameInput.value = ''; // Clear name input
+                currentPlayerName = ''; // Clear current player name
+            });
+
+            // Initial load of previous players (when start screen is shown)
+            loadAndDisplayPreviousPlayers(); 
         });
     </script>
 </body>
